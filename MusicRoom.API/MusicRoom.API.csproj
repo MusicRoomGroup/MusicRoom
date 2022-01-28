@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="SpotifyAPI.Web" />
+    <None Remove="Interfaces\" />
+    <None Remove="MusicAPIs\" />
+    <None Remove="SpotifyAPI.Web.Auth" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="SpotifyAPI.Web" Version="5.1.1" />
+    <PackageReference Include="SpotifyAPI.Web.Auth" Version="5.1.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Interfaces\" />
+    <Folder Include="APIs\" />
+  </ItemGroup>
+</Project>
