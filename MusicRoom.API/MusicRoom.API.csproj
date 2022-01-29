@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
@@ -9,6 +9,9 @@
     <None Remove="Interfaces\" />
     <None Remove="MusicAPIs\" />
     <None Remove="SpotifyAPI.Web.Auth" />
+    <None Remove="Enums\" />
+    <None Remove="Models\" />
+    <None Remove="Factories\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="SpotifyAPI.Web" Version="5.1.1" />
@@ -17,5 +20,8 @@
   <ItemGroup>
     <Folder Include="Interfaces\" />
     <Folder Include="APIs\" />
+    <Folder Include="Enums\" />
+    <Folder Include="Models\" />
+    <Folder Include="Factories\" />
   </ItemGroup>
 </Project>

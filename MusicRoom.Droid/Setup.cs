@@ -1,12 +1,18 @@
+using Android.App;
 using Microsoft.Extensions.Logging;
-using MvvmCross.Platforms.Android.Core;
-using MusicRoom.Core;
+using MvvmCross.Forms.Platforms.Android.Core;
 using Serilog;
 using Serilog.Extensions.Logging;
 
-namespace MusicRoom.Droid
+#if DEBUG
+[assembly: Application(Debuggable = true)]
+#else
+[assembly: Application(Debuggable = false)]
+#endif
+
+namespace MusicRoom.Forms.Droid
 {
-    public class Setup : MvxAndroidSetup<App>
+    public class Setup : MvxFormsAndroidSetup<Core.App, UI.App>
     {
         protected override ILoggerProvider CreateLogProvider() => new SerilogLoggerProvider();
 

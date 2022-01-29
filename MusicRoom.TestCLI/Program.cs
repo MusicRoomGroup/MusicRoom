@@ -1,47 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using SpotifyAPI.Web;
-using SpotifyAPI.Web.Auth;
-using SpotifyAPI.Web.Enums;
+using System.Threading.Tasks;
+using MusicRoom.API.Enums;
+using MusicRoom.API.Factories;
+using MusicRoom.API.Interfaces;
+using MusicRoom.API.Models;
 
 namespace MusicRoom.TestCLI
 {
-    class Program
+    public class Program
     {
-        static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
-            ImplicitGrantAuth auth = new(
-               "e6320f6b0830403ebe516c21b852a02a",
-               "http://localhost:4002",
-               "http://localhost:4002",
-               Scope.UserReadPlaybackState |
-               Scope.UserReadPrivate |
-               Scope.UserModifyPlaybackState 
-            );
+            IAPIFactory factory = new MusicAPIFactory(SupportedAPI.Spotify);
 
-            auth.AuthReceived += async (sender, payload) => 
-	        {
-                auth.Stop();
-			    SpotifyWebAPI spotify = new()
-			    {
-					AccessToken = payload.AccessToken,
-					TokenType = payload.TokenType,
-			    };
+            IPlayerAPI player = await factory.BuildPlayerAPIAsync();
 
-                var tracks = await spotify.SearchItemsAsync("mareux+the+perfect+girl", SearchType.Track);
-                var track = tracks.Tracks.Items.First();
+            IEnumerable<Device> devices = await player.GetDevicesAsync();
 
-                var devices = await spotify.GetDevicesAsync();
-                var tracksToPlay = new List<string> { track.Uri };
-                await spotify.ResumePlaybackAsync(uris: tracksToPlay, offset: 0);
-	        };
+            if (devices.Any())
+            { 
+			    IEnumerable<Track> tracks = await player.SearchTracksAsync("the+perfect+girl+mareux");
 
-		    auth.Start();
+			    Track track = tracks.First();
 
-            auth.OpenBrowser();
+                Console.WriteLine(track.ImageUrl);
 
-            Console.ReadLine();
+			    await player.PlaySong(track.Uri);
+
+                Console.ReadLine();
+	        }
         }
     }
 }

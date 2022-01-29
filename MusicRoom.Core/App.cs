@@ -1,8 +1,8 @@
 ﻿using MvvmCross.IoC;
 using MvvmCross.ViewModels;
-using MusicRoom.Core.ViewModels.Main;
+using MusicRoom.Forms.Core.ViewModels.Home;
 
-namespace MusicRoom.Core
+namespace MusicRoom.Forms.Core
 {
     public class App : MvxApplication
     {
@@ -13,7 +13,7 @@ namespace MusicRoom.Core
                 .AsInterfaces()
                 .RegisterAsLazySingleton();
 
-            RegisterAppStart<MainViewModel>();
+            RegisterAppStart<HomeViewModel>();
         }
     }
 }

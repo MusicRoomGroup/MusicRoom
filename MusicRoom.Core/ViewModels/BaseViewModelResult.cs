@@ -4,7 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MvvmCross.ViewModels;
 
-namespace MusicRoom.Core.ViewModels
+namespace MusicRoom.Forms.Core.ViewModels
 {
     public abstract class BaseViewModelResult<TResult> : BaseViewModel, IMvxViewModelResult<TResult>
         where TResult : notnull
