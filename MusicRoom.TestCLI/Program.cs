@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -21,16 +21,17 @@ namespace MusicRoom.TestCLI
 
             if (devices.Any())
             { 
-			    IEnumerable<Track> tracks = await player.SearchTracksAsync("the+perfect+girl+mareux");
+                IEnumerable<Track> tracks = await player.SearchTracksAsync("the+perfect+girl+mareux");
 
-			    Track track = tracks.First();
+                Track track = tracks.First();
 
                 Console.WriteLine(track.ImageUrl);
+                var device = devices.First();
+                await player.PlaySong(device.Id, track.Uri);
 
-			    await player.PlaySong(track.Uri);
 
                 Console.ReadLine();
-	        }
+            }
         }
     }
 }

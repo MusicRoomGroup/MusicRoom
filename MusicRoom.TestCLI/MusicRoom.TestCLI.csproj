@@ -6,6 +6,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="SpotifyAPI.Web" Version="5.1.1" />
+    <PackageReference Include="SpotifyAPI.Web.Auth" Version="5.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\MusicRoom.API\MusicRoom.API.csproj" />
   </ItemGroup>
 </Project>

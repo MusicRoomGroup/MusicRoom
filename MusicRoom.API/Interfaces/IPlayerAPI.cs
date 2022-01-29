@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using MusicRoom.API.Models;
 
@@ -25,7 +25,7 @@ namespace MusicRoom.API.Interfaces
         Task<IEnumerable<Artist>> SearchArtistsAsync(string query);
 
         Task PlaySong(string uri);
-
-        Task PlaySong(IEnumerable<string> uris);
+        Task PlaySong(string deviceId, string uri);
+        Task PlaySongs(IEnumerable<string> uris);
     }
 }

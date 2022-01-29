@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -55,6 +55,7 @@ namespace MusicRoom.API.MusicAPIs
 
         public async Task<IEnumerable<Models.Device>> GetDevicesAsync()
         {
+            
             AvailabeDevices availableDevices = await _spotify.GetDevicesAsync();
 
             return availableDevices.Devices
@@ -66,12 +67,15 @@ namespace MusicRoom.API.MusicAPIs
             });
         }
 
-        public async Task PlaySong(IEnumerable<string> uris)
+        public async Task PlaySongs(IEnumerable<string> uris)
             => await _spotify.ResumePlaybackAsync(uris: uris.ToList(), offset: 0);
 
         public async Task PlaySong(string uri)
-            => await _spotify.ResumePlaybackAsync(uris: new List<string>() { uri }, offset: 0);
-
+        {
+            await _spotify.ResumePlaybackAsync(uris: new List<string>() { uri }, offset: 0);
+        }
+        public async Task PlaySong(string deviceId, string uri) =>
+            await _spotify.ResumePlaybackAsync(deviceId: deviceId, uris: new List<string>() { uri }, offset: 0);
         public async Task SelectDeviceAsync(string deviceId)
             => await _spotify.TransferPlaybackAsync(deviceId);
 
@@ -146,6 +150,8 @@ namespace MusicRoom.API.MusicAPIs
 
             };
         }
+
+        
         #endregion
     }
 }
