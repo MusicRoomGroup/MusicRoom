@@ -7,7 +7,7 @@ using MusicRoom.API.Factories;
 using MusicRoom.API.Interfaces;
 using MusicRoom.API.Models;
 
-namespace MusicRoom.TestCLI
+namespace MusicRoom.API.Tests.CLI
 {
     public class Program
     {
@@ -30,7 +30,6 @@ namespace MusicRoom.TestCLI
                 Device device = devices.First();
 
                 await player.PlaySong(device.Id, track.Uri);
-
 
                 Console.ReadLine();
             }
