@@ -8,13 +8,9 @@
   <ItemGroup>
     <PackageReference Include="MvvmCross" Version="8.0.2" />
     <PackageReference Include="MvvmCross.Forms" Version="8.0.2" />
-    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2125" />
+    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2337" />
   </ItemGroup>
   
-  <ItemGroup>
-    <ProjectReference Include="..\MusicRoom.Core\MusicRoom.Core.csproj" />
-  </ItemGroup>
-
   <ItemGroup>
     <Compile Update="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
@@ -39,4 +35,7 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\MusicRoom.Core\MusicRoom.Core.csproj" />
+  </ItemGroup>
 </Project>

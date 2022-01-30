@@ -13,7 +13,13 @@
             <Label Text="Search Track"
                 VerticalOptions="CenterAndExpand" 
                 HorizontalOptions="CenterAndExpand" />
-            <Entry />
+            <Entry 
+                VerticalOptions="CenterAndExpand" 
+                HorizontalOptions="CenterAndExpand"
+                WidthRequest="200"
+		        x:Name="TrackQueryEntry" 
+		        mvx:Bi.nd="Text TrackQuery, Mode=TwoWay"/>
+            <Button Text="Connect" mvx:Bi.nd="Clicked ConnectAsyncCommand"/>
         </StackLayout>
     </ContentPage.Content>
 </views:MvxContentPage>

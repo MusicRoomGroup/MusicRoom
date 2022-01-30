@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using MusicRoom.API.Interfaces;
+using MvvmCross.Commands;
 
 namespace MusicRoom.Core.ViewModels.Home
 {
@@ -14,9 +15,13 @@ namespace MusicRoom.Core.ViewModels.Home
 
         private string _trackQuery;
         public string TrackQuery
-        { 
-	        get => _trackQuery;
-            set => SetProperty(ref _trackQuery, value);
+        {
+            get => _trackQuery;
+            set
+            {
+                _trackQuery = value;
+                RaisePropertyChanged(() => TrackQuery);
+            }
         }
 
         public HomeViewModel(IAPIFactory factory)
@@ -27,7 +32,14 @@ namespace MusicRoom.Core.ViewModels.Home
         public override async Task Initialize()
 	    {
             await base.Initialize();
-            _player = await _factory.BuildPlayerAPIAsync();
         }
+
+        public IMvxCommand ConnectAsyncCommand => new MvxAsyncCommand(ConnectAsync);
+
+        public async Task ConnectAsync()
+        {
+            await _factory.AuthorizeAsync();	
+	    }
+
     }
 }
