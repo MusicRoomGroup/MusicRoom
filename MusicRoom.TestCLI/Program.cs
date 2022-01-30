@@ -26,7 +26,9 @@ namespace MusicRoom.TestCLI
                 Track track = tracks.First();
 
                 Console.WriteLine(track.ImageUrl);
-                var device = devices.First();
+
+                Device device = devices.First();
+
                 await player.PlaySong(device.Id, track.Uri);
 
 

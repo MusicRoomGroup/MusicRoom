@@ -71,11 +71,11 @@ namespace MusicRoom.API.MusicAPIs
             => await _spotify.ResumePlaybackAsync(uris: uris.ToList(), offset: 0);
 
         public async Task PlaySong(string uri)
-        {
-            await _spotify.ResumePlaybackAsync(uris: new List<string>() { uri }, offset: 0);
-        }
-        public async Task PlaySong(string deviceId, string uri) =>
-            await _spotify.ResumePlaybackAsync(deviceId: deviceId, uris: new List<string>() { uri }, offset: 0);
+            => await _spotify.ResumePlaybackAsync(uris: new List<string>() { uri }, offset: 0);
+
+        public async Task PlaySong(string deviceId, string uri) 
+		    => await _spotify.ResumePlaybackAsync(deviceId: deviceId, uris: new List<string>() { uri }, offset: 0);
+
         public async Task SelectDeviceAsync(string deviceId)
             => await _spotify.TransferPlaybackAsync(deviceId);
 
