@@ -6,57 +6,58 @@ using System.Threading.Tasks;
 using MusicRoom.API.Interfaces;
 using MusicRoom.API.Models;
 using SpotifyAPI.Web;
-using SpotifyAPI.Web.Enums;
-using SpotifyAPI.Web.Models;
 
 namespace MusicRoom.API.MusicAPIs
 {
     public class SpotifyPlayerAPI : IPlayerAPI
     {
-        private static SpotifyWebAPI _spotify;
+        private static SpotifyClient _spotify;
 
-        public SpotifyPlayerAPI(SpotifyWebAPI spotify)
+        public SpotifyPlayerAPI(SpotifyClient spotify)
         {
             _spotify = spotify;
         }
 
         public async Task<Track> GetTrackAsync(string trackId)
-            => BuildTrack(await _spotify.GetTrackAsync(trackId));
+            => BuildTrack(await _spotify.Tracks.Get(trackId));
 
         public async Task<Album> GetAlbumAsync(string albumId)
-            => BuildAlbum(await _spotify.GetAlbumAsync(albumId));
+            => BuildAlbum(await _spotify.Albums.Get(albumId));
 
         public async Task<Artist> GetArtistAsync(string artistId) 
-            => BuildArtist(await _spotify.GetArtistAsync(artistId));
+            => BuildArtist(await _spotify.Artists.Get(artistId));
 
         public async Task<Query> SearchAsync(string query)
-            => BuildQuery(await _spotify.SearchItemsAsync(query, SearchType.All));
+        {
+            var request = new SearchRequest(SearchRequest.Types.All, query);
+            return BuildQuery(await _spotify.Search.Item(request));
+	    }
 
         public async Task<IEnumerable<Track>> SearchTracksAsync(string query)
         {
-            SearchItem search = await _spotify.SearchItemsAsync(query, SearchType.Track);
-
-            return search.Tracks.Items.Select(BuildTrack);
+            var request = new SearchRequest(SearchRequest.Types.Track, query);
+            SearchResponse response = await _spotify.Search.Item(request);
+            return response.Tracks.Items.Select(BuildTrack);
         }
 
         public async Task<IEnumerable<Album>> SearchAlbumsAsync(string query)
         {
-            SearchItem search = await _spotify.SearchItemsAsync(query, SearchType.Album);
-
-            return search.Albums.Items.Select(BuildAlbum);
+            var request = new SearchRequest(SearchRequest.Types.Album, query);
+            SearchResponse response = await _spotify.Search.Item(request);
+            return response.Albums.Items.Select(BuildAlbum);
         }
 
         public async Task<IEnumerable<Artist>> SearchArtistsAsync(string query)
         {
-            SearchItem search = await _spotify.SearchItemsAsync(query, SearchType.Artist);
-
-            return search.Artists.Items.Select(BuildArtist);
+            var request = new SearchRequest(SearchRequest.Types.Artist, query);
+            SearchResponse response = await _spotify.Search.Item(request);
+            return response.Artists.Items.Select(BuildArtist);
         }
 
         public async Task<IEnumerable<Models.Device>> GetDevicesAsync()
         {
-            
-            AvailabeDevices availableDevices = await _spotify.GetDevicesAsync();
+
+            DeviceResponse availableDevices = await _spotify.Player.GetAvailableDevices();
 
             return availableDevices.Devices
             .Select(d => new Models.Device()
@@ -68,16 +69,34 @@ namespace MusicRoom.API.MusicAPIs
         }
 
         public async Task PlaySongs(IEnumerable<string> uris)
-            => await _spotify.ResumePlaybackAsync(uris: uris.ToList(), offset: 0);
+        { 
+            var request = new PlayerResumePlaybackRequest() 
+	        { 
+		        Uris = uris.ToList(),
+	        };
+            await _spotify.Player.ResumePlayback(request);
+	    }
 
         public async Task PlaySong(string uri)
-            => await _spotify.ResumePlaybackAsync(uris: new List<string>() { uri }, offset: 0);
+        {
+            var request = new PlayerResumePlaybackRequest() { Uris = new List<string>() { uri } };
+            await _spotify.Player.ResumePlayback(request);
+	    }
 
-        public async Task PlaySong(string deviceId, string uri) 
-		    => await _spotify.ResumePlaybackAsync(deviceId: deviceId, uris: new List<string>() { uri }, offset: 0);
+        public async Task PlaySong(string deviceId, string uri)
+        { 
+            var request = new PlayerResumePlaybackRequest() 
+	        { 
+                DeviceId = deviceId,
+		        Uris = new List<string>() { uri },
+	        };
+            await _spotify.Player.ResumePlayback(request);
+	    }
 
         public async Task SelectDeviceAsync(string deviceId)
-            => await _spotify.TransferPlaybackAsync(deviceId);
+        { 
+            await _spotify.Player.TransferPlayback(new(new List<string>() { deviceId }));
+	    }
 
         #region private methods
         private static Track BuildTrack(FullTrack fullTrack)
@@ -142,16 +161,13 @@ namespace MusicRoom.API.MusicAPIs
             };
         }
 
-        private static Query BuildQuery(SearchItem item)
+        private static Query BuildQuery(SearchResponse item)
         {
             return new Query
             {
                 Tracks = item.Tracks.Items.Select(BuildTrack),
-
             };
         }
-
-        
         #endregion
     }
 }

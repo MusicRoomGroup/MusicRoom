@@ -12,7 +12,7 @@ namespace MusicRoom.API.Factories
 {
     public class MusicAPIFactory : IAPIFactory
     {
-        private SpotifyWebAPI _spotify;
+        private SpotifyClient _spotify;
 
         private readonly SupportedAPI _api;
 

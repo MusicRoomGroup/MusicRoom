@@ -10,9 +10,10 @@
                       Title="Main page">
     <ContentPage.Content>
         <StackLayout>
-            <Label Text="Welcome!!&#10;App scaffolded with MvxScaffolding"
+            <Label Text="Search Track"
                 VerticalOptions="CenterAndExpand" 
                 HorizontalOptions="CenterAndExpand" />
+            <Entry />
         </StackLayout>
     </ContentPage.Content>
 </views:MvxContentPage>
