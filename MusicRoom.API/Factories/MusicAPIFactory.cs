@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using MusicRoom.API.Enums;
@@ -6,12 +7,13 @@ using MusicRoom.API.Interfaces;
 using MusicRoom.API.MusicAPIs;
 using SpotifyAPI.Web;
 using SpotifyAPI.Web.Auth;
-using SpotifyAPI.Web.Enums;
 
 namespace MusicRoom.API.Factories
 {
     public class MusicAPIFactory : IAPIFactory
     {
+        private static EmbedIOAuthServer _server;
+
         private SpotifyClient _spotify;
 
         private readonly SupportedAPI _api;
@@ -36,39 +38,49 @@ namespace MusicRoom.API.Factories
 
         private async Task<IPlayerAPI> BuildSpotifyPlayerAPIAsync()
         {
-            AuthorizeSpotify();
+            await AuthorizeSpotifyAsync();
 
             _event.WaitOne();
 
     	    return await Task.FromResult(new SpotifyPlayerAPI(_spotify));
         }
 
-        private void AuthorizeSpotify()
+        private async Task AuthorizeSpotifyAsync()
 	    {
-            var auth = new ImplicitGrantAuth(
-               "e6320f6b0830403ebe516c21b852a02a", // TODO: replace with server call to get the client id
-               "http://localhost:4002",
-               "http://localhost:4002",
-               Scope.UserReadPlaybackState |
-               Scope.UserReadPrivate |
-               Scope.UserModifyPlaybackState 
-            );
+			_server = new EmbedIOAuthServer(new Uri("http://localhost:5000/callback"), 5000); 
 
-            auth.AuthReceived += (sender, payload) => 
-	        {
-                auth.Stop();
-                _spotify = new SpotifyWebAPI()
-			    {
-					AccessToken = payload.AccessToken,
-					TokenType = payload.TokenType,
-			    };
+            await _server.Start();
 
-                _event.Set();
-	        };
+            _server.ImplictGrantReceived += OnImplicitGrantReceivedAsync;
 
-		    auth.Start();
+            _server.ErrorReceived += OnErrorReceivedAsync;
 
-            auth.OpenBrowser();
+            var request = new LoginRequest(_server.BaseUri, "e6320f6b0830403ebe516c21b852a02a", LoginRequest.ResponseType.Token)
+            {
+                Scope = new List<string> 
+		        { 
+		            Scopes.AppRemoteControl, 
+		            Scopes.UserReadPrivate,
+                    Scopes.UserReadPlaybackState,
+                    Scopes.UserModifyPlaybackState
+		        }
+            };
+
+            BrowserUtil.Open(request.ToUri());
+        }
+
+        private async Task OnImplicitGrantReceivedAsync(object sender, ImplictGrantResponse response)
+        {
+            await _server.Stop();
+            _spotify = new SpotifyClient(response.AccessToken);
+            _event.Set();
+        }
+
+        private static async Task OnErrorReceivedAsync(object sender, string error, string state)
+        {
+            await _server.Stop();
+
+            throw new NotSupportedException($"Aborting authorization, error received: {error}");
         }
     }
 }

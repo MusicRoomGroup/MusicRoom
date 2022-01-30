@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Application
-    x:Class="MusicRoom.UI.App"
+    x:Class="MusicRoom.Forms.UI.App"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:d="clr-namespace:MvvmCross.Forms;assembly=MvvmCross.Forms"
-    xmlns:resources="clr-namespace:MusicRoom.UI.Resources">
+    xmlns:resources="clr-namespace:MusicRoom.Forms.UI.Resources">
     <Application.Resources>
 
         <!--  Application resource dictionary  -->

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using MusicRoom.API.Interfaces;
 using MusicRoom.API.Models;
@@ -95,7 +94,7 @@ namespace MusicRoom.API.MusicAPIs
 
         public async Task SelectDeviceAsync(string deviceId)
         { 
-            await _spotify.Player.TransferPlayback(new(new List<string>() { deviceId }));
+            await _spotify.Player.TransferPlayback(new PlayerTransferPlaybackRequest(new List<string>() { deviceId }));
 	    }
 
         #region private methods

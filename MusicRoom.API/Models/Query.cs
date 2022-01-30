@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using SpotifyAPI.Web.Models;
 
 namespace MusicRoom.API.Models
 {
@@ -10,8 +9,8 @@ namespace MusicRoom.API.Models
 
         public IEnumerable<Track> Tracks { get; set; }
 
-        public Paging<Track> Albums { get; set; }
+        public IEnumerable<Track> Albums { get; set; }
 
-        public Paging<Track> Artists { get; set; }
+        public IEnumerable<Track> Artists { get; set; }
     }
 }
