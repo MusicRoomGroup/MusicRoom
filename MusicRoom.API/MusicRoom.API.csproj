@@ -12,6 +12,7 @@
     <None Remove="Enums\" />
     <None Remove="Models\" />
     <None Remove="Factories\" />
+    <None Remove="Xamarin.Essentials" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Interfaces\" />
@@ -23,5 +24,6 @@
   <ItemGroup>
     <PackageReference Include="SpotifyAPI.Web" Version="6.2.2" />
     <PackageReference Include="SpotifyAPI.Web.Auth" Version="6.2.2" />
+    <PackageReference Include="Xamarin.Essentials" Version="1.7.1" />
   </ItemGroup>
 </Project>

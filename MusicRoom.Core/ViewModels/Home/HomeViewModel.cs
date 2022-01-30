@@ -38,7 +38,7 @@ namespace MusicRoom.Core.ViewModels.Home
 
         public async Task ConnectAsync()
         {
-            await _factory.AuthorizeAsync();	
+            await _factory.BuildPlayerAPIAsync();	
 	    }
 
     }

@@ -7,6 +7,7 @@ using MusicRoom.API.Interfaces;
 using MusicRoom.API.MusicAPIs;
 using SpotifyAPI.Web;
 using SpotifyAPI.Web.Auth;
+using Xamarin.Essentials;
 
 namespace MusicRoom.API.Factories
 {
@@ -66,7 +67,8 @@ namespace MusicRoom.API.Factories
 		        }
             };
 
-            BrowserUtil.Open(request.ToUri());
+	        await Browser.OpenAsync(request.ToUri());
+            //BrowserUtil.Open(request.ToUri());
         }
 
         private async Task OnImplicitGrantReceivedAsync(object sender, ImplictGrantResponse response)
