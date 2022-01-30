@@ -7,7 +7,7 @@ namespace MusicRoom.API.Models
     {
         public string AlbumName { get; set; }
 
-        public IEnumerable<string> Artists { get; set; }
+        public string  Artists { get; set; }
 
         public TimeSpan Duration { get; set; }
     }

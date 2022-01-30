@@ -9,7 +9,7 @@ namespace MusicRoom.API.Models
 
 	    public string Name { get; set; }
 
-	    public string ImageUrl { get; set; }
+	    public Uri ImageUrl { get; set; }
 
 	    public string Uri { get; set; }
 

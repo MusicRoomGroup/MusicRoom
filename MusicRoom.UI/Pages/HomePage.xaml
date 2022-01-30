@@ -10,6 +10,7 @@
                       Title="Main page">
     <ContentPage.Content>
         <StackLayout>
+            <Button Text="Connect" mvx:Bi.nd="Clicked ConnectAsyncCommand"/>
             <Label Text="Search Track"
                 VerticalOptions="CenterAndExpand" 
                 HorizontalOptions="CenterAndExpand" />
@@ -19,7 +20,20 @@
                 WidthRequest="200"
 		        x:Name="TrackQueryEntry" 
 		        mvx:Bi.nd="Text TrackQuery, Mode=TwoWay"/>
-            <Button Text="Connect" mvx:Bi.nd="Clicked ConnectAsyncCommand"/>
+            <Button Text="Search" mvx:Bi.nd="Clicked SearchAsyncCommand"/>
+            <ScrollView>
+			    <ListView ItemsSource="{Binding Tracks}" SelectedItem="{Binding Track}" > 
+				    <ListView.ItemTemplate>
+					    <DataTemplate>
+							<ImageCell
+			                ImageSource="{Binding ImageUrl}" 
+                            Text="{Binding Name}"
+                            Detail="{Binding Artists}"
+			                />
+                        </DataTemplate>
+					</ListView.ItemTemplate> 
+				</ListView>
+		    </ScrollView>
         </StackLayout>
     </ContentPage.Content>
 </views:MvxContentPage>

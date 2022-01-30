@@ -1,8 +1,8 @@
-using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using MusicRoom.API.Interfaces;
+using MusicRoom.API.Models;
 using MvvmCross.Commands;
 
 namespace MusicRoom.Core.ViewModels.Home
@@ -20,7 +20,29 @@ namespace MusicRoom.Core.ViewModels.Home
             set
             {
                 _trackQuery = value;
-                RaisePropertyChanged(() => TrackQuery);
+               RaisePropertyChanged(() => TrackQuery);
+            }
+        }
+
+        private ObservableCollection<Track> _tracks;
+        public ObservableCollection<Track> Tracks
+        {
+            get => _tracks;
+            set
+            {
+                _tracks = value;
+                RaisePropertyChanged(() => Tracks);
+            }
+        }
+
+        private Track _track;
+        public Track Track
+        {
+            get => _track;
+            set
+            {
+                _track = value;
+                RaisePropertyChanged(() => Track);
             }
         }
 
@@ -34,12 +56,20 @@ namespace MusicRoom.Core.ViewModels.Home
             await base.Initialize();
         }
 
-        public IMvxCommand ConnectAsyncCommand => new MvxAsyncCommand(ConnectAsync);
+        public IMvxCommand ConnectAsyncCommand 
+	        => new MvxAsyncCommand(ConnectAsync);
 
-        public async Task ConnectAsync()
+        public IMvxCommand SearchAsyncCommand
+            => new MvxAsyncCommand(SearchAsync);
+
+        private async Task ConnectAsync()
         {
-            await _factory.BuildPlayerAPIAsync();	
-	    }
+            _player = await _factory.BuildPlayerAPIAsync();
+        }
 
+        private async Task SearchAsync()
+        {
+            Tracks = new ObservableCollection<Track>(await _player.SearchTracksAsync(TrackQuery.Replace(" ", "+")));
+	    }
     }
 }

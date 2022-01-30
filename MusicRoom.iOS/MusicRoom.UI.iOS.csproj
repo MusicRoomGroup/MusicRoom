@@ -117,6 +117,9 @@
     <PackageReference Include="Xamarin.Forms">
       <Version>5.0.0.2337</Version>
     </PackageReference>
+    <PackageReference Include="Xamarin.Essentials">
+      <Version>1.7.1</Version>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MusicRoom.Core\MusicRoom.Core.csproj">

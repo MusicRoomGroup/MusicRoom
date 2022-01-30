@@ -6,7 +6,7 @@ using MusicRoom.API.Interfaces;
 using MusicRoom.API.Models;
 using SpotifyAPI.Web;
 
-namespace MusicRoom.API.MusicAPIs
+namespace MusicRoom.API.APIs
 {
     public class SpotifyPlayerAPI : IPlayerAPI
     {
@@ -106,8 +106,8 @@ namespace MusicRoom.API.MusicAPIs
                 Name = fullTrack.Name,
                 Uri = fullTrack.Uri,
                 AlbumName = fullTrack.Album.Name,
-                ImageUrl = fullTrack.Album.Images.First().Url,
-                Artists = fullTrack.Artists.Select(a => a.Name ),
+                ImageUrl = new Uri(fullTrack.Album.Images.First().Url),
+                Artists = string.Join(", ", fullTrack.Artists.Select(a => a.Name)),
                 Duration = TimeSpan.FromMilliseconds(fullTrack.DurationMs)
             };
         }
@@ -120,7 +120,7 @@ namespace MusicRoom.API.MusicAPIs
                 Name = album.Name,
                 Uri = album.Uri,
                 TotalTracks = album.TotalTracks,
-                ImageUrl = album.Images.First().Url,
+                ImageUrl = new Uri(album.Images.First().Url),
                 Artists = album.Artists.Select(a => a.Name ),
             };
         }
@@ -133,7 +133,7 @@ namespace MusicRoom.API.MusicAPIs
                 Name = album.Name,
                 Uri = album.Uri,
                 TotalTracks = album.TotalTracks,
-                ImageUrl = album.Images.First().Url,
+                ImageUrl = new Uri(album.Images.First().Url),
                 Artists = album.Artists.Select(a => a.Name),
                 Genres = album.Genres
             };
@@ -155,7 +155,7 @@ namespace MusicRoom.API.MusicAPIs
             {
                 Id = artist.Id,
                 Name = artist.Name,
-                ImageUrl = artist.Images.First().Url,
+                ImageUrl = new Uri(artist.Images.First().Url),
                 Genres = artist.Genres
             };
         }

@@ -8,9 +8,13 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.0" />
     <PackageReference Include="MvvmCross" Version="8.0.2" />
+    <PackageReference Include="Xamarin.Essentials" Version="1.7.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\MusicRoom.API\MusicRoom.API.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Xamarin.Essentials" />
   </ItemGroup>
 </Project>

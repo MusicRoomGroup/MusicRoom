@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using MusicRoom.API.APIs;
 using MusicRoom.API.Enums;
 using MusicRoom.API.Interfaces;
-using MusicRoom.API.MusicAPIs;
 using SpotifyAPI.Web;
 using SpotifyAPI.Web.Auth;
 using Xamarin.Essentials;
@@ -41,8 +41,6 @@ namespace MusicRoom.API.Factories
         {
             await AuthorizeSpotifyAsync();
 
-            _event.WaitOne();
-
     	    return await Task.FromResult(new SpotifyPlayerAPI(_spotify));
         }
 
@@ -67,8 +65,16 @@ namespace MusicRoom.API.Factories
 		        }
             };
 
-	        await Browser.OpenAsync(request.ToUri());
-            //BrowserUtil.Open(request.ToUri());
+            try
+            { 
+			    await Browser.OpenAsync(request.ToUri(), BrowserLaunchMode.External);
+	        }
+            catch (NotImplementedInReferenceAssemblyException)
+            {
+			    BrowserUtil.Open(request.ToUri());
+	        }
+
+            _event.WaitOne();
         }
 
         private async Task OnImplicitGrantReceivedAsync(object sender, ImplictGrantResponse response)
