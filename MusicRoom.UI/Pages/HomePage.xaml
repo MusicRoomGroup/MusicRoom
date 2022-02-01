@@ -21,6 +21,9 @@
 		        x:Name="TrackQueryEntry" 
 		        mvx:Bi.nd="Text TrackQuery, Mode=TwoWay"/>
             <Button Text="Search" mvx:Bi.nd="Clicked SearchAsyncCommand"/>
+            <ImageButton Source="https://cdn-icons-png.flaticon.com/512/61/61094.png"
+                    HorizontalOptions="Center"
+                    VerticalOptions="CenterAndExpand" />
             <ScrollView>
 			    <ListView ItemsSource="{Binding Tracks}" SelectedItem="{Binding Track}" > 
 				    <ListView.ItemTemplate>

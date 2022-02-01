@@ -62,6 +62,9 @@ namespace MusicRoom.Core.ViewModels.Home
         public IMvxCommand SearchAsyncCommand
             => new MvxAsyncCommand(SearchAsync);
 
+        public IMvxCommand SettingsAsyncCommand
+            => new MvxAsyncCommand(SettingsAsync);
+
         private async Task ConnectAsync()
         {
             _player = await _factory.BuildPlayerAPIAsync();
@@ -71,5 +74,10 @@ namespace MusicRoom.Core.ViewModels.Home
         {
             Tracks = new ObservableCollection<Track>(await _player.SearchTracksAsync(TrackQuery.Replace(" ", "+")));
 	    }
+
+        private async Task SettingsAsync()
+        {
+            Tracks = new ObservableCollection<Track>(await _player.SearchTracksAsync(TrackQuery.Replace(" ", "+")));
+        }
     }
 }
