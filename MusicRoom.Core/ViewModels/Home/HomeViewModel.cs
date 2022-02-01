@@ -85,9 +85,8 @@ namespace MusicRoom.Core.ViewModels.Home
 
         private async Task SearchAsync()
         {
-            TrackPage = await _player.SearchTracksAsync(TrackQuery.Replace(" ", "+"));
-
-            TrackList = new ObservableCollection<Track>(TrackPage.Results);
+            TrackPage = new PagedResult<Track>(await _player.SearchTracksAsync(TrackQuery.Replace(" ", "+")));
+            TrackList = new ObservableCollection<Track>();
 	    }
 
         private async Task PlayAsync(Track track)

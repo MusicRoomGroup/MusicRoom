@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -67,12 +67,15 @@ namespace MusicRoom.API.Factories
 
             try
             { 
-			    await Browser.OpenAsync(request.ToUri(), BrowserLaunchMode.External);
-	        }
+			    //await Browser.OpenAsync(request.ToUri(), BrowserLaunchMode.External);
+                await Browser.OpenAsync(request.ToUri());
+            }
             catch (NotImplementedInReferenceAssemblyException)
             {
 			    BrowserUtil.Open(request.ToUri());
 	        }
+
+
 
             _event.WaitOne();
         }
