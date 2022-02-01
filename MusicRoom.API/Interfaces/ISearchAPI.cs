@@ -15,10 +15,10 @@ namespace MusicRoom.API.Interfaces
 
         Task<Query> SearchAsync(string query);
 
-        Task<IEnumerable<Track>> SearchTracksAsync(string query);
+        Task<PagedResult<Track>> SearchTracksAsync(string query);
 
-        Task<IEnumerable<Album>> SearchAlbumsAsync(string query);
+        Task<PagedResult<Album>> SearchAlbumsAsync(string query);
 
-        Task<IEnumerable<Artist>> SearchArtistsAsync(string query);
+        Task<PagedResult<Artist>> SearchArtistsAsync(string query);
     }
 }

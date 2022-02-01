@@ -20,18 +20,30 @@ namespace MusicRoom.Core.ViewModels.Home
             set
             {
                 _trackQuery = value;
-               RaisePropertyChanged(() => TrackQuery);
+                RaisePropertyChanged(() => TrackQuery);
+                Task.Run(async () => await SearchAsync());
             }
         }
 
-        private ObservableCollection<Track> _tracks;
-        public ObservableCollection<Track> Tracks
+        private ObservableCollection<Track> _trackList;
+        public ObservableCollection<Track> TrackList
         {
-            get => _tracks;
+            get => _trackList;
             set
             {
-                _tracks = value;
-                RaisePropertyChanged(() => Tracks);
+                _trackList = value;
+                RaisePropertyChanged(() => TrackList);
+            }
+        }
+
+        private PagedResult<Track> _trackPage;
+        public PagedResult<Track> TrackPage
+        {
+            get => _trackPage;
+            set
+            {
+                _trackPage = value;
+                RaisePropertyChanged(() => TrackPage);
             }
         }
 
@@ -43,6 +55,7 @@ namespace MusicRoom.Core.ViewModels.Home
             {
                 _track = value;
                 RaisePropertyChanged(() => Track);
+                Task.Run(async () => await _player.PlaySong(Track.Uri));
             }
         }
 
@@ -62,6 +75,9 @@ namespace MusicRoom.Core.ViewModels.Home
         public IMvxCommand SearchAsyncCommand
             => new MvxAsyncCommand(SearchAsync);
 
+        public IMvxCommand<Track> PlaySongAsyncCommand
+            => new MvxAsyncCommand<Track>(PlayAsync);
+
         private async Task ConnectAsync()
         {
             _player = await _factory.BuildPlayerAPIAsync();
@@ -69,7 +85,14 @@ namespace MusicRoom.Core.ViewModels.Home
 
         private async Task SearchAsync()
         {
-            Tracks = new ObservableCollection<Track>(await _player.SearchTracksAsync(TrackQuery.Replace(" ", "+")));
+            TrackPage = await _player.SearchTracksAsync(TrackQuery.Replace(" ", "+"));
+
+            TrackList = new ObservableCollection<Track>(TrackPage.Results);
+	    }
+
+        private async Task PlayAsync(Track track)
+        {
+            await _player.PlaySong(Track.Uri);
 	    }
     }
 }

@@ -32,25 +32,43 @@ namespace MusicRoom.API.APIs
             return BuildQuery(await _spotify.Search.Item(request));
 	    }
 
-        public async Task<IEnumerable<Track>> SearchTracksAsync(string query)
+        public async Task<PagedResult<Track>> SearchTracksAsync(string query)
         {
             var request = new SearchRequest(SearchRequest.Types.Track, query);
             SearchResponse response = await _spotify.Search.Item(request);
-            return response.Tracks.Items.Select(BuildTrack);
+            return new PagedResult<Track>()
+            {
+                Count = (int)response.Tracks.Total,
+                Next = response.Tracks.Next,
+                Previous = response.Tracks.Previous,
+                Results = response.Tracks.Items.Select(BuildTrack)
+            };
         }
 
-        public async Task<IEnumerable<Album>> SearchAlbumsAsync(string query)
+        public async Task<PagedResult<Album>> SearchAlbumsAsync(string query)
         {
             var request = new SearchRequest(SearchRequest.Types.Album, query);
             SearchResponse response = await _spotify.Search.Item(request);
-            return response.Albums.Items.Select(BuildAlbum);
+            return new PagedResult<Album>()
+            {
+                Count = (int)response.Albums.Total,
+                Next = response.Albums.Next,
+                Previous = response.Albums.Previous,
+                Results = response.Albums.Items.Select(BuildAlbum)
+            };
         }
 
-        public async Task<IEnumerable<Artist>> SearchArtistsAsync(string query)
+        public async Task<PagedResult<Artist>> SearchArtistsAsync(string query)
         {
             var request = new SearchRequest(SearchRequest.Types.Artist, query);
             SearchResponse response = await _spotify.Search.Item(request);
-            return response.Artists.Items.Select(BuildArtist);
+            return new PagedResult<Artist>()
+            {
+                Count = (int)response.Artists.Total,
+                Next = response.Artists.Next,
+                Previous = response.Artists.Previous,
+                Results = response.Artists.Items.Select(BuildArtist)
+            };
         }
 
         public async Task<IEnumerable<Models.Device>> GetDevicesAsync()

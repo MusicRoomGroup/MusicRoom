@@ -21,9 +21,9 @@ namespace MusicRoom.API.Tests.CLI
 
             if (devices.Any())
             { 
-                IEnumerable<Track> tracks = await player.SearchTracksAsync("the+perfect+girl+mareux");
+                PagedResult<Track> tracks = await player.SearchTracksAsync("the+perfect+girl+mareux");
 
-                Track track = tracks.First();
+                Track track = tracks.Results.First();
 
                 Console.WriteLine(track.ImageUrl);
 
