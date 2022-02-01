@@ -22,13 +22,14 @@
 		        mvx:Bi.nd="Text TrackQuery, Mode=TwoWay"/>
             <Button Text="Search" mvx:Bi.nd="Clicked SearchAsyncCommand"/>
             <ScrollView>
-			    <ListView ItemsSource="{Binding Tracks}" SelectedItem="{Binding Track}" > 
+			    <ListView ItemsSource="{Binding Tracks}" SelectedItem="{Binding Track}"> 
 				    <ListView.ItemTemplate>
 					    <DataTemplate>
 							<ImageCell
 			                ImageSource="{Binding ImageUrl}" 
                             Text="{Binding Name}"
                             Detail="{Binding Artists}"
+                            mvx:Bi.nd="Tapped PlaySongAsyncCommand"
 			                />
                         </DataTemplate>
 					</ListView.ItemTemplate> 

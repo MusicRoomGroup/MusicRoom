@@ -26,6 +26,7 @@
 
   <ItemGroup>
     <None Remove="Xamarin.Essentials" />
+    <None Remove="Behaviors\" />
   </ItemGroup>
   <ItemGroup>
     <None Update="App.xaml">
@@ -41,5 +42,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MusicRoom.Core\MusicRoom.Core.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Behaviors\" />
   </ItemGroup>
 </Project>
