@@ -4,6 +4,8 @@ using MusicRoom.Core.ViewModels.Home;
 using MvvmCross;
 using MusicRoom.API.Interfaces;
 using MusicRoom.API.Factories;
+using MusicRoom.Core.Services.Interfaces;
+using MusicRoom.Core.Services.Implementations;
 
 namespace MusicRoom.Core
 {
@@ -16,7 +18,7 @@ namespace MusicRoom.Core
                 .AsInterfaces()
                 .RegisterAsLazySingleton();
 
-            Mvx.IoCProvider.RegisterType<IAPIFactory, MusicAPIFactory>();
+            Mvx.IoCProvider.RegisterType<IYoutubeSearchService, YoutubeSearchService>();
 
             RegisterAppStart<HomeViewModel>();
         }
