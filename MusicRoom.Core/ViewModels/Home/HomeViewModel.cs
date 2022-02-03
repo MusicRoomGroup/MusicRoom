@@ -70,6 +70,9 @@ namespace MusicRoom.Core.ViewModels.Home
         public IMvxCommand<YouTubeVideo> PlayVideoAsyncCommand
             => new MvxAsyncCommand<YouTubeVideo>(PlayAsync);
 
+        public IMvxCommand GetNextPageCommand
+            => new MvxAsyncCommand(GetNextPageAsync);
+
         private async Task SearchAsync()
         {
             VideoPage = await _youtube.SearchVideosAsync(VideoQuery);
@@ -81,6 +84,13 @@ namespace MusicRoom.Core.ViewModels.Home
         {
             //TODO: implement music player logic
             return Task.CompletedTask;
+	    }
+
+        private async Task GetNextPageAsync()
+        {
+            VideoPage = await _youtube.GetNextPageAsync(VideoPage.Next);
+
+            VideoList.AddRange(VideoPage.Results);
 	    }
     }
 }

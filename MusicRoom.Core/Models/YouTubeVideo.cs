@@ -9,6 +9,8 @@ namespace MusicRoom.Core.Models
 
         public string Description { get; set; }
 
+        public string Uri { get; set; }
+
         public string ImageUri { get; set; }
     }
 }

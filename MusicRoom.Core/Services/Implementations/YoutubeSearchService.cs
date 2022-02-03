@@ -67,7 +67,8 @@ namespace MusicRoom.Core.Services.Implementations
 			    Id = result.Id.VideoId,
 			    Title = result.Snippet.Title,
 			    Description = result.Snippet.Description,
-			    ImageUri = result.Snippet.Thumbnails.Default__.Url,
+                Uri = "https://www.youtube.com/watch?v=" + result.Id.VideoId,
+                ImageUri = result.Snippet.Thumbnails.Default__.Url,
 			};
     	}
     }
