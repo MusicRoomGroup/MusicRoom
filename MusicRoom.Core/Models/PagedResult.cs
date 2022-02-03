@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 
-namespace MusicRoom.API.Models
+namespace MusicRoom.Core.Models
 {
-    public class PagedResult<T> where T : Item
+    public class PagedResult<T>
     {
         public int Count { get; set; }
 

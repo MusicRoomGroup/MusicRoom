@@ -9,12 +9,21 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.0" />
     <PackageReference Include="MvvmCross" Version="8.0.2" />
     <PackageReference Include="Xamarin.Essentials" Version="1.7.1" />
+    <PackageReference Include="Google.Apis.YouTube.v3" Version="1.55.0.2449" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MusicRoom.API\MusicRoom.API.csproj" />
+    <None Remove="Xamarin.Essentials" />
+    <None Remove="Services\" />
+    <None Remove="Services\Interfaces\" />
+    <None Remove="Services\Implementations\" />
+    <None Remove="Models\" />
+    <None Remove="Google.Apis.YouTube.v3" />
   </ItemGroup>
   <ItemGroup>
-    <None Remove="Xamarin.Essentials" />
+    <Folder Include="Services\" />
+    <Folder Include="Services\Interfaces\" />
+    <Folder Include="Services\Implementations\" />
+    <Folder Include="Models\" />
   </ItemGroup>
 </Project>
