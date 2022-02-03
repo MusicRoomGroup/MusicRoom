@@ -14,24 +14,24 @@ namespace MusicRoom.Core.Services.Implementations
     {
         private readonly YouTubeService _youtube;
 
+        private readonly int _maxResults = 20;
+
         public YoutubeSearchService()
         {
             _youtube = new YouTubeService(new BaseClientService.Initializer()
             {
-                ApiKey = "REPLACE_ME",
+                ApiKey = "AIzaSyDXUlXDHz_zilBEmUgSLsSTp7ntWCcUGgA",
 			    ApplicationName = "MusicRoom"
             });
         }
 
         public async Task<PagedResult<YouTubeVideo>> SearchVideosAsync(string query)
         {
-            var videoPage = new PagedResult<YouTubeVideo>();
-
             ListRequest request = _youtube.Search.List("snippet");
 
             request.Q = query;
 
-            request.MaxResults = 50;
+            request.MaxResults = _maxResults;
 
             return BuildVideoPage(await request.ExecuteAsync());
 	    }
@@ -42,6 +42,8 @@ namespace MusicRoom.Core.Services.Implementations
 
             request.PageToken = token;
 
+            request.MaxResults = 20;
+
             return BuildVideoPage(await request.ExecuteAsync());
 	    }
 
@@ -49,6 +51,7 @@ namespace MusicRoom.Core.Services.Implementations
         { 
             return new PagedResult<YouTubeVideo>
             {
+                Count = response.Items.Count,
                 Next = response.NextPageToken,
                 Previous = response.PrevPageToken,
                 Results = response.Items

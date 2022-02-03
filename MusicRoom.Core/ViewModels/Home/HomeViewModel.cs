@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using MusicRoom.Core.Models;
 using MusicRoom.Core.Services.Interfaces;
@@ -18,7 +16,6 @@ namespace MusicRoom.Core.ViewModels.Home
             {
                 _videoQuery = value;
                 RaisePropertyChanged(() => VideoQuery);
-                Task.Run(async () => await SearchAsync());
             }
         }
 
@@ -76,7 +73,8 @@ namespace MusicRoom.Core.ViewModels.Home
         private async Task SearchAsync()
         {
             VideoPage = await _youtube.SearchVideosAsync(VideoQuery);
-            VideoList = new MvxObservableCollection<YouTubeVideo>();
+
+            VideoList = new MvxObservableCollection<YouTubeVideo>(VideoPage.Results);
 	    }
 
         private Task PlayAsync(YouTubeVideo video)
