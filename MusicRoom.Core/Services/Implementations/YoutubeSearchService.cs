@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Google.Apis.Services;
+using Google.Apis.Util;
 using Google.Apis.YouTube.v3;
 using Google.Apis.YouTube.v3.Data;
 using MusicRoom.Core.Models;
@@ -14,20 +15,20 @@ namespace MusicRoom.Core.Services.Implementations
     {
         private readonly YouTubeService _youtube;
 
-        private readonly int _maxResults = 20;
+        private readonly int _maxResults = 50;
 
         public YoutubeSearchService()
         {
             _youtube = new YouTubeService(new BaseClientService.Initializer()
             {
-                ApiKey = "AIzaSyDXUlXDHz_zilBEmUgSLsSTp7ntWCcUGgA",
+                ApiKey = "AIzaSyA8ag7gsspTeya6fg6D_piY_vwhJPKsPE4",
 			    ApplicationName = "MusicRoom"
             });
         }
 
-        public async Task<PagedResult<YouTubeVideo>> SearchVideosAsync(string query)
+        public async Task<PagedResult<YouTubeVideoListItem>> SearchVideosAsync(string query)
         {
-            ListRequest request = _youtube.Search.List("snippet");
+            ListRequest request = _youtube.Search.List(new string[] { "snippet", "contentDetails" });
 
             request.RegionCode = "US";
 
@@ -38,9 +39,9 @@ namespace MusicRoom.Core.Services.Implementations
             return BuildVideoPage(await request.ExecuteAsync());
 	    }
 
-        public async Task<PagedResult<YouTubeVideo>> GetNextPageAsync(string token) 
+        public async Task<PagedResult<YouTubeVideoListItem>> GetNextPageAsync(string token) 
 	    {
-            ListRequest request = _youtube.Search.List("snippet");
+            ListRequest request = _youtube.Search.List(new string[] { "snippet", "contentDetails" });
 
             request.PageToken = token;
 
@@ -51,9 +52,9 @@ namespace MusicRoom.Core.Services.Implementations
             return BuildVideoPage(await request.ExecuteAsync());
 	    }
 
-        private PagedResult<YouTubeVideo> BuildVideoPage(SearchListResponse response)
+        private PagedResult<YouTubeVideoListItem> BuildVideoPage(SearchListResponse response)
         { 
-            return new PagedResult<YouTubeVideo>
+            return new PagedResult<YouTubeVideoListItem>
             {
                 Count = (int)response.PageInfo.TotalResults,
                 Next = response.NextPageToken,
@@ -64,9 +65,9 @@ namespace MusicRoom.Core.Services.Implementations
             };
 	    }
 
-        private YouTubeVideo BuildVideoModel(SearchResult result) 
+        private YouTubeVideoListItem BuildVideoModel(SearchResult result) 
 	    { 
-            return new YouTubeVideo
+            return new YouTubeVideoListItem
 			{
 			    Id = result.Id.VideoId,
 			    Title = result.Snippet.Title,

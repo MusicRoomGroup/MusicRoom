@@ -6,8 +6,8 @@ namespace MusicRoom.Core.Services.Interfaces
 {
     public interface IYoutubeSearchService
     {
-        Task<PagedResult<YouTubeVideo>> SearchVideosAsync(string query);
+        Task<PagedResult<YouTubeVideoListItem>> SearchVideosAsync(string query);
 
-        Task<PagedResult<YouTubeVideo>> GetNextPageAsync(string token);
+        Task<PagedResult<YouTubeVideoListItem>> GetNextPageAsync(string token);
     }
 }

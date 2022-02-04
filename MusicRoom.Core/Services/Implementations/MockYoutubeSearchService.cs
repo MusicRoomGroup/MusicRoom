@@ -12,15 +12,15 @@ namespace MusicRoom.Core.Services.Implementations
         {
         }
 
-        public Task<PagedResult<YouTubeVideo>> GetNextPageAsync(string token)
-            => Task.FromResult(new PagedResult<YouTubeVideo>
+        public Task<PagedResult<YouTubeVideoListItem>> GetNextPageAsync(string token)
+            => Task.FromResult(new PagedResult<YouTubeVideoListItem>
             {
                 Count = 100000,
                 Next = "1234",
                 Previous = string.Empty,
-                Results = new List<YouTubeVideo>()
+                Results = new List<YouTubeVideoListItem>()
                 {
-                    new YouTubeVideo
+                    new YouTubeVideoListItem
                     {
                         Title = "The Perfect Girl - Mareux",
                         Description = "A test description",
@@ -29,7 +29,7 @@ namespace MusicRoom.Core.Services.Implementations
                         ImageUri = "https://i.ytimg.com/vi/V1l6kxQNq54/hqdefault.jpg?sqp=-oaymwEjCOADEI4CSFryq4qpAxUIARUAAAAAGAElAADIQj0AgKJDeAE=&rs=AOn4CLBdI_PxctR8gl5Tl5Kg__WTfwU1yw"
 
                     },
-                    new YouTubeVideo
+                    new YouTubeVideoListItem
                     {
                         Title = "Alberto Balsalm",
                         Description = "Provided to YouTube by PIAS Alberto Balsalm · Aphex Twin ... I Care Because You Do",
@@ -37,7 +37,7 @@ namespace MusicRoom.Core.Services.Implementations
                         Uri = "https://www.youtube.com/watch?v=-ZVZgCrHy5E",
                         ImageUri ="https://i.ytimg.com/vi/-ZVZgCrHy5E/hq720.jpg?sqp=-oaymwEjCOgCEMoBSFryq4qpAxUIARUAAAAAGAElAADIQj0AgKJDeAE=&rs=AOn4CLADTJC1RU4jro74QIzs5aBFAS0aHA"
                     },
-                    new YouTubeVideo
+                    new YouTubeVideoListItem
                     {
                         Title = "Joe Mama",
                         Description = "",
@@ -48,15 +48,15 @@ namespace MusicRoom.Core.Services.Implementations
 
                 }
             });
-        public Task<PagedResult<YouTubeVideo>> SearchVideosAsync(string query) 
-            => Task.FromResult(new PagedResult<YouTubeVideo>
+        public Task<PagedResult<YouTubeVideoListItem>> SearchVideosAsync(string query) 
+            => Task.FromResult(new PagedResult<YouTubeVideoListItem>
             {
                 Count = 100000,
                 Next = "1234",
                 Previous = string.Empty,
-                Results = new List<YouTubeVideo>()
+                Results = new List<YouTubeVideoListItem>()
                 {
-                    new YouTubeVideo
+                    new YouTubeVideoListItem
                     {
                         Title = "Spongebob Squarepants - Rev Up Those Fryers",
                         Description = "No shirt No shoes No service",
@@ -65,7 +65,7 @@ namespace MusicRoom.Core.Services.Implementations
                         ImageUri = "https://i.ytimg.com/vi/2L0G2G4V3T4/hqdefault.jpg?sqp=-oaymwEjCOADEI4CSFryq4qpAxUIARUAAAAAGAElAADIQj0AgKJDeAE=&rs=AOn4CLAA56Y11XNSqj6neOxaZKXbpwHn1g"
 
                     },
-                    new YouTubeVideo
+                    new YouTubeVideoListItem
                     {
                         Title = "Spongebob I Heart Dancing",
                         Description = "",
@@ -73,7 +73,7 @@ namespace MusicRoom.Core.Services.Implementations
                         Uri = "https://www.youtube.com/watch?v=up2JZwy18eY",
                         ImageUri ="https://i.ytimg.com/vi/up2JZwy18eY/hqdefault.jpg?sqp=-oaymwEjCOADEI4CSFryq4qpAxUIARUAAAAAGAElAADIQj0AgKJDeAE=&rs=AOn4CLAIZNG5DX6mo_sHZSbv3rfAjVfv0A"
                     },
-                    new YouTubeVideo
+                    new YouTubeVideoListItem
                     {
                         Title = "Have you finished those errands?",
                         Description = "This is reuploaded because I got terminated in my old youtube channel",

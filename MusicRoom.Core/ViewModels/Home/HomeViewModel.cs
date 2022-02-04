@@ -21,8 +21,8 @@ namespace MusicRoom.Core.ViewModels.Home
             }
         }
 
-        private MvxObservableCollection<YouTubeVideo> _videoList;
-        public MvxObservableCollection<YouTubeVideo> VideoList
+        private MvxObservableCollection<YouTubeVideoListItem> _videoList;
+        public MvxObservableCollection<YouTubeVideoListItem> VideoList
         {
             get => _videoList;
             set
@@ -32,8 +32,8 @@ namespace MusicRoom.Core.ViewModels.Home
             }
         }
 
-        private PagedResult<YouTubeVideo> _videoPage;
-        public PagedResult<YouTubeVideo> VideoPage
+        private PagedResult<YouTubeVideoListItem> _videoPage;
+        public PagedResult<YouTubeVideoListItem> VideoPage
         {
             get => _videoPage;
             set
@@ -70,8 +70,8 @@ namespace MusicRoom.Core.ViewModels.Home
             }
         }
 
-        private YouTubeVideo _video;
-        public YouTubeVideo Video
+        private YouTubeVideoListItem _video;
+        public YouTubeVideoListItem Video
         {
             get => _video;
             set
@@ -96,8 +96,8 @@ namespace MusicRoom.Core.ViewModels.Home
         public IMvxCommand SearchAsyncCommand
             => new MvxAsyncCommand(SearchAsync);
 
-        public IMvxCommand<YouTubeVideo> PlayVideoAsyncCommand
-            => new MvxAsyncCommand<YouTubeVideo>(PlayAsync);
+        public IMvxCommand<YouTubeVideoListItem> PlayVideoAsyncCommand
+            => new MvxAsyncCommand<YouTubeVideoListItem>(PlayAsync);
 
         public IMvxCommand GetNextPageCommand
             => new MvxAsyncCommand(GetNextPageAsync);
@@ -108,10 +108,10 @@ namespace MusicRoom.Core.ViewModels.Home
 
             VideoPage = await _youtube.SearchVideosAsync(VideoQuery);
 
-            VideoList = new MvxObservableCollection<YouTubeVideo>(VideoPage.Results);
+            VideoList = new MvxObservableCollection<YouTubeVideoListItem>(VideoPage.Results);
 	    }
 
-        private async Task PlayAsync(YouTubeVideo video)
+        private async Task PlayAsync(YouTubeVideoListItem video)
         {
             await Browser.OpenAsync(video.Uri);
 	    }

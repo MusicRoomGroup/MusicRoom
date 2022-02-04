@@ -1,7 +1,7 @@
 using System;
 namespace MusicRoom.Core.Models
 {
-    public class YouTubeVideo
+    public abstract class YouTubeVideoBase
     {
         public string Id { get; set; }
 
