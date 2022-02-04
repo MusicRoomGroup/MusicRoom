@@ -1,67 +1,91 @@
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
-using MusicRoom.API.Interfaces;
-using MusicRoom.API.Models;
+using MusicRoom.Core.Models;
+using MusicRoom.Core.Services.Interfaces;
 using MvvmCross.Commands;
+using MvvmCross.ViewModels;
+using Xamarin.Essentials;
 
 namespace MusicRoom.Core.ViewModels.Home
 {
     public class HomeViewModel : BaseViewModel
     {
-        private readonly IAPIFactory _factory;
-
-        private IPlayerAPI _player;
-
-        private string _trackQuery;
-        public string TrackQuery
+        private string _videoQuery;
+        public string VideoQuery
         {
-            get => _trackQuery;
+            get => _videoQuery;
             set
             {
-                _trackQuery = value;
-                RaisePropertyChanged(() => TrackQuery);
-                Task.Run(async () => await SearchAsync());
+                _videoQuery = value;
+                RaisePropertyChanged(() => VideoQuery);
             }
         }
 
-        private ObservableCollection<Track> _trackList;
-        public ObservableCollection<Track> TrackList
+        private MvxObservableCollection<YouTubeVideoListItem> _videoList;
+        public MvxObservableCollection<YouTubeVideoListItem> VideoList
         {
-            get => _trackList;
+            get => _videoList;
             set
             {
-                _trackList = value;
-                RaisePropertyChanged(() => TrackList);
+                _videoList = value;
+                RaisePropertyChanged(() => VideoList);
             }
         }
 
-        private PagedResult<Track> _trackPage;
-        public PagedResult<Track> TrackPage
+        private PagedResult<YouTubeVideoListItem> _videoPage;
+        public PagedResult<YouTubeVideoListItem> VideoPage
         {
-            get => _trackPage;
+            get => _videoPage;
             set
             {
-                _trackPage = value;
-                RaisePropertyChanged(() => TrackPage);
+                _videoPage = value;
+                Total += VideoPage.Results.Count();
+                RaisePropertyChanged(() => VideoPage);
             }
         }
 
-        private Track _track;
-        public Track Track
+        private string _videoCount = "Search Videos";
+        public string VideoCount
         {
-            get => _track;
+            get => _videoCount;
             set
             {
-                _track = value;
-                RaisePropertyChanged(() => Track);
-                Task.Run(async () => await _player.PlaySong(Track.Uri));
+                _videoCount = value;
+                RaisePropertyChanged(() => VideoCount);
             }
         }
 
-        public HomeViewModel(IAPIFactory factory)
+        private int _total;
+        public int Total
         {
-            _factory = factory;
+            get => _total;
+            set
+            {
+                _total = value;
+                if (VideoPage != null)
+                { 
+					VideoCount = $"Displaying {Total} out of {VideoPage.Count}";
+		        }
+                RaisePropertyChanged(() => Total);
+            }
+        }
+
+        private YouTubeVideoListItem _video;
+        public YouTubeVideoListItem Video
+        {
+            get => _video;
+            set
+            {
+                _video = value;
+                RaisePropertyChanged(() => Video);
+            }
+        }
+
+        private readonly IYoutubeSearchService _youtube;
+
+        public HomeViewModel(IYoutubeSearchService youtube)
+        {
+            _youtube = youtube;
         }
 
         public override async Task Initialize()
@@ -69,29 +93,34 @@ namespace MusicRoom.Core.ViewModels.Home
             await base.Initialize();
         }
 
-        public IMvxCommand ConnectAsyncCommand 
-	        => new MvxAsyncCommand(ConnectAsync);
-
         public IMvxCommand SearchAsyncCommand
             => new MvxAsyncCommand(SearchAsync);
 
-        public IMvxCommand<Track> PlaySongAsyncCommand
-            => new MvxAsyncCommand<Track>(PlayAsync);
+        public IMvxCommand<YouTubeVideoListItem> PlayVideoAsyncCommand
+            => new MvxAsyncCommand<YouTubeVideoListItem>(PlayAsync);
 
-        private async Task ConnectAsync()
-        {
-            _player = await _factory.BuildPlayerAPIAsync();
-        }
+        public IMvxCommand GetNextPageCommand
+            => new MvxAsyncCommand(GetNextPageAsync);
 
         private async Task SearchAsync()
         {
-            TrackPage = new PagedResult<Track>(await _player.SearchTracksAsync(TrackQuery.Replace(" ", "+")));
-            TrackList = new ObservableCollection<Track>();
+            Total = 0;
+
+            VideoPage = await _youtube.SearchVideosAsync(VideoQuery);
+
+            VideoList = new MvxObservableCollection<YouTubeVideoListItem>(VideoPage.Results);
 	    }
 
-        private async Task PlayAsync(Track track)
+        private async Task PlayAsync(YouTubeVideoListItem video)
         {
-            await _player.PlaySong(Track.Uri);
+            await Browser.OpenAsync(video.Uri);
+	    }
+
+        private async Task GetNextPageAsync()
+        {
+            VideoPage = await _youtube.GetNextPageAsync(VideoPage.Next);
+
+            VideoList.AddRange(VideoPage.Results);
 	    }
     }
 }
