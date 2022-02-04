@@ -29,6 +29,8 @@ namespace MusicRoom.Core.Services.Implementations
         {
             ListRequest request = _youtube.Search.List("snippet");
 
+            request.RegionCode = "US";
+
             request.Q = query;
 
             request.MaxResults = _maxResults;
@@ -42,7 +44,9 @@ namespace MusicRoom.Core.Services.Implementations
 
             request.PageToken = token;
 
-            request.MaxResults = 20;
+            request.RegionCode = "US";
+
+            request.MaxResults = _maxResults;
 
             return BuildVideoPage(await request.ExecuteAsync());
 	    }
@@ -51,7 +55,7 @@ namespace MusicRoom.Core.Services.Implementations
         { 
             return new PagedResult<YouTubeVideo>
             {
-                Count = response.Items.Count,
+                Count = (int)response.PageInfo.TotalResults,
                 Next = response.NextPageToken,
                 Previous = response.PrevPageToken,
                 Results = response.Items

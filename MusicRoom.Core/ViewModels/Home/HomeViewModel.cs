@@ -1,8 +1,10 @@
+using System.Linq;
 using System.Threading.Tasks;
 using MusicRoom.Core.Models;
 using MusicRoom.Core.Services.Interfaces;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
+using Xamarin.Essentials;
 
 namespace MusicRoom.Core.ViewModels.Home
 {
@@ -37,7 +39,34 @@ namespace MusicRoom.Core.ViewModels.Home
             set
             {
                 _videoPage = value;
+                Total += VideoPage.Results.Count();
                 RaisePropertyChanged(() => VideoPage);
+            }
+        }
+
+        private string _videoCount = "Search Videos";
+        public string VideoCount
+        {
+            get => _videoCount;
+            set
+            {
+                _videoCount = value;
+                RaisePropertyChanged(() => VideoCount);
+            }
+        }
+
+        private int _total;
+        public int Total
+        {
+            get => _total;
+            set
+            {
+                _total = value;
+                if (VideoPage != null)
+                { 
+					VideoCount = $"Displaying {Total} out of {VideoPage.Count}";
+		        }
+                RaisePropertyChanged(() => Total);
             }
         }
 
@@ -75,15 +104,16 @@ namespace MusicRoom.Core.ViewModels.Home
 
         private async Task SearchAsync()
         {
+            Total = 0;
+
             VideoPage = await _youtube.SearchVideosAsync(VideoQuery);
 
             VideoList = new MvxObservableCollection<YouTubeVideo>(VideoPage.Results);
 	    }
 
-        private Task PlayAsync(YouTubeVideo video)
+        private async Task PlayAsync(YouTubeVideo video)
         {
-            //TODO: implement music player logic
-            return Task.CompletedTask;
+            await Browser.OpenAsync(video.Uri);
 	    }
 
         private async Task GetNextPageAsync()
