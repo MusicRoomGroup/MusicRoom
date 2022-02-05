@@ -6,9 +6,9 @@ using MusicRoom.Core.Services.Interfaces;
 
 namespace MusicRoom.Core.Services.Implementations
 {
-    public class YoutubeSearchService : IYoutubeSearchService
+    public class MockYouTubeSearchService : IYoutubeSearchService
     {
-        public YoutubeSearchService()
+        public MockYouTubeSearchService()
         {
         }
 

@@ -15,7 +15,9 @@ namespace MusicRoom.Core.Services.Implementations
 		private static List<PagedResult<YouTubeVideoListItem>> _cachedResults { get; set; }
 
         private readonly YoutubeClient _youtube;
+        private readonly int _limit = 20;
 
+        
         public YouTubeSearchService()
         {
             _youtube = new YoutubeClient();
@@ -41,16 +43,28 @@ namespace MusicRoom.Core.Services.Implementations
 	    {
             _cachedResults = new List<PagedResult<YouTubeVideoListItem>>();
 
-			var pagedResult = new PagedResult<YouTubeVideoListItem>();
+			
 
             var pageCount = 0;
 
             await foreach(Batch<ISearchResult> result in _youtube.Search.GetResultBatchesAsync(query))
             {
-				pagedResult.Count = result.Items.Count();
+                pageCount++;
+                var pagedResult = new PagedResult<YouTubeVideoListItem>();
+                pagedResult.Count = result.Items.Count();
 				pagedResult.Results = result.Items.OfType<VideoSearchResult>().Select(BuildYouTubeListItem);
                 pagedResult.Next = pageCount.ToString();
                 _cachedResults.Add(pagedResult);
+                if (pageCount > 0)
+                {
+                    pagedResult.Previous = (pageCount - 1).ToString();
+                }
+                if (pageCount >= _limit)
+                {
+                    pagedResult.Next = null;
+                    break;
+                }
+                
 	        }
 	
 	    }
