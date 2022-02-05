@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 using MusicRoom.Core.Models;
@@ -12,62 +11,75 @@ namespace MusicRoom.Core.Services.Implementations
 {
     public class YouTubeSearchService : IYoutubeSearchService
     {
-		private static List<PagedResult<YouTubeVideoListItem>> _cachedResults { get; set; }
+        private static IAsyncEnumerator<Batch<ISearchResult>> _enumerator;
+
+        private static Queue<PagedResult<YouTubeVideoListItem>> _queueCache;
+
+		private readonly int _limit = 20;
 
         private readonly YoutubeClient _youtube;
-        private readonly int _limit = 20;
 
-        
+		private bool _isQueuing = false;
+
         public YouTubeSearchService()
         {
             _youtube = new YoutubeClient();
-            _cachedResults = new List<PagedResult<YouTubeVideoListItem>>();
+
+			_queueCache = new Queue<PagedResult<YouTubeVideoListItem>>();
         }
 
-        public Task<PagedResult<YouTubeVideoListItem>> GetNextPageAsync(string token)
+        public async Task<PagedResult<YouTubeVideoListItem>> GetNextPageAsync(string token)
         {
-            return int.TryParse(token, out var index)
-                ? Task.FromResult(_cachedResults[index])
-                : throw new KeyNotFoundException("The page does not exist");
+            if (_queueCache.TryDequeue(out PagedResult<YouTubeVideoListItem> result)) { 
+				return result;
+			} else if (_isQueuing) {
+                await Task.Delay(10);
+                return await GetNextPageAsync(token);
+            } else {
+                await _enumerator.MoveNextAsync();
+                return BuildPagedResult(_enumerator.Current.Items);
+            }
         }
 
         public async Task<PagedResult<YouTubeVideoListItem>> SearchVideosAsync(string query) 
         {
-            // TODO: consider not awaiting the cache building process and just return the first result
-            await BuildCacheAsync(query);
+             _enumerator = _youtube.Search.GetResultBatchesAsync(query).GetAsyncEnumerator();
 
-            return _cachedResults.First();
+			await _enumerator.MoveNextAsync();
+
+		    Batch<ISearchResult> firstPage = _enumerator.Current;
+
+		    _ = Task.Run(() => CacheResultsAsync());
+
+			return BuildPagedResult(firstPage.Items);
 	    }
 
-        private async Task BuildCacheAsync(string query) 
-	    {
-            _cachedResults = new List<PagedResult<YouTubeVideoListItem>>();
+		private async Task CacheResultsAsync()
+		{
+			_isQueuing = true;
+			var pageCount = 0;
+			while ( await _enumerator.MoveNextAsync())
+			{
+				_queueCache.Enqueue(BuildPagedResult(_enumerator.Current.Items));
+				pageCount++; 
+				if (pageCount > _limit)
+				{
+					break;
+				}
+			}
+			_isQueuing = false;
+			;
+		}
 
-			
+		private PagedResult<YouTubeVideoListItem> BuildPagedResult(IReadOnlyList<ISearchResult> results)
+        {
+            return new PagedResult<YouTubeVideoListItem>
+			{
+				Count = results.Count,
+				Results = results.OfType<VideoSearchResult>().Select(BuildYouTubeListItem),
+			};
+		}
 
-            var pageCount = 0;
-
-            await foreach(Batch<ISearchResult> result in _youtube.Search.GetResultBatchesAsync(query))
-            {
-                pageCount++;
-                var pagedResult = new PagedResult<YouTubeVideoListItem>();
-                pagedResult.Count = result.Items.Count();
-				pagedResult.Results = result.Items.OfType<VideoSearchResult>().Select(BuildYouTubeListItem);
-                pagedResult.Next = pageCount.ToString();
-                _cachedResults.Add(pagedResult);
-                if (pageCount > 0)
-                {
-                    pagedResult.Previous = (pageCount - 1).ToString();
-                }
-                if (pageCount >= _limit)
-                {
-                    pagedResult.Next = null;
-                    break;
-                }
-                
-	        }
-	
-	    }
         private YouTubeVideoListItem BuildYouTubeListItem(VideoSearchResult videoResult)
 		{
 			return new YouTubeVideoListItem
@@ -77,7 +89,7 @@ namespace MusicRoom.Core.Services.Implementations
 				ImageUri = videoResult.Thumbnails.First().Url,
 				Title = videoResult.Title,
 				Uri = videoResult.Url,
-				Duration = (TimeSpan)videoResult.Duration
+				Duration = videoResult.Duration
 			};
 		} 
     }

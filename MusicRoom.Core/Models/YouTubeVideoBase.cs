@@ -9,7 +9,7 @@ namespace MusicRoom.Core.Models
 
         public string Author { get; set; }
 
-        public TimeSpan Duration { get; set; }
+        public TimeSpan? Duration { get; set; }
 
         public string Uri { get; set; }
 

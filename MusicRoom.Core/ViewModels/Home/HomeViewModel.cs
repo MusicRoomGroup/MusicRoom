@@ -64,9 +64,20 @@ namespace MusicRoom.Core.ViewModels.Home
                 _total = value;
                 if (VideoPage != null)
                 { 
-					VideoCount = $"Displaying {Total} out of {VideoPage.Count}";
+					VideoCount = $"Displaying {Total} Videos";
 		        }
                 RaisePropertyChanged(() => Total);
+            }
+        }
+
+        private bool _isLoading;
+        public bool IsLoading
+        {
+            get => _isLoading;
+            set
+            {
+                _isLoading = value;
+                RaisePropertyChanged(() => IsLoading);
             }
         }
 
@@ -105,10 +116,13 @@ namespace MusicRoom.Core.ViewModels.Home
         private async Task SearchAsync()
         {
             Total = 0;
+            IsLoading = true;
 
             VideoPage = await _youtube.SearchVideosAsync(VideoQuery);
 
             VideoList = new MvxObservableCollection<YouTubeVideoListItem>(VideoPage.Results);
+
+            IsLoading = false;
 	    }
 
         private async Task PlayAsync(YouTubeVideoListItem video)
@@ -118,9 +132,16 @@ namespace MusicRoom.Core.ViewModels.Home
 
         private async Task GetNextPageAsync()
         {
-            VideoPage = await _youtube.GetNextPageAsync(VideoPage.Next);
+            if (!IsLoading)
+            { 
+			    IsLoading = true;
 
-            VideoList.AddRange(VideoPage.Results);
+			    VideoPage = await _youtube.GetNextPageAsync(VideoPage.Next);
+
+			    VideoList.AddRange(VideoPage.Results);
+
+			    IsLoading = false;
+			}
 	    }
     }
 }

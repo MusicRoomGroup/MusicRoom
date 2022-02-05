@@ -20,6 +20,9 @@
 		        x:Name="TrackQueryEntry" 
 		        mvx:Bi.nd="Text VideoQuery, Mode=TwoWay"/>
             <Button Text="Search" mvx:Bi.nd="Clicked SearchAsyncCommand"/>
+	        <Label VerticalOptions="CenterAndExpand" 
+		        HorizontalOptions="CenterAndExpand"
+		        Text="Loading" mvx:Bi.nd="IsVisible IsLoading" />
             <ScrollView>
 			    <views:MvxListView 
 					VerticalOptions="CenterAndExpand" 
@@ -32,7 +35,7 @@
 							<ImageCell
 			                ImageSource="{Binding ImageUri}" 
                             Text="{Binding Title}"
-                            Detail="{Binding Description}" />
+                            Detail="{Binding Author}" />
                         </DataTemplate>
 					</ListView.ItemTemplate> 
 				    <ListView.Behaviors>  
