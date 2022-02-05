@@ -67,8 +67,8 @@ namespace MusicRoom.API.Factories
 
             try
             { 
-			    //await Browser.OpenAsync(request.ToUri(), BrowserLaunchMode.External);
-                await Browser.OpenAsync(request.ToUri());
+			    await Browser.OpenAsync(request.ToUri(), BrowserLaunchMode.External);
+                //await Browser.OpenAsync(request.ToUri());
             }
             catch (NotImplementedInReferenceAssemblyException)
             {

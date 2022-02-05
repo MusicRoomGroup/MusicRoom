@@ -17,7 +17,6 @@ namespace MusicRoom.Core
                 .RegisterAsLazySingleton();
 
             Mvx.IoCProvider.RegisterType<IYoutubeSearchService, YoutubeSearchService>();
-            //Mvx.IoCProvider.RegisterType<IYoutubeSearchService, MockYoutubeSearchService>();
 
             RegisterAppStart<HomeViewModel>();
         }

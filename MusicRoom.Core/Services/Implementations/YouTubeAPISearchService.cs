@@ -11,13 +11,13 @@ using static Google.Apis.YouTube.v3.SearchResource;
 
 namespace MusicRoom.Core.Services.Implementations
 {
-    public class YoutubeSearchService : IYoutubeSearchService
+    public class YouTubeAPISearchService : IYoutubeSearchService
     {
         private readonly YouTubeService _youtube;
 
         private readonly int _maxResults = 50;
 
-        public YoutubeSearchService()
+        public YouTubeAPISearchService()
         {
             _youtube = new YouTubeService(new BaseClientService.Initializer()
             {
@@ -71,7 +71,7 @@ namespace MusicRoom.Core.Services.Implementations
 			{
 			    Id = result.Id.VideoId,
 			    Title = result.Snippet.Title,
-			    Description = result.Snippet.Description,
+			    //Description = result.Snippet.Description,
                 Uri = "https://www.youtube.com/watch?v=" + result.Id.VideoId,
                 ImageUri = result.Snippet.Thumbnails.Default__.Url,
 			};
