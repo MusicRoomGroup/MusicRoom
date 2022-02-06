@@ -6,9 +6,9 @@ using MusicRoom.Core.Services.Interfaces;
 
 namespace MusicRoom.Core.Services.Implementations
 {
-    public class MockYoutubeSearchService : IYoutubeSearchService
+    public class MockYouTubeSearchService : IYoutubeSearchService
     {
-        public MockYoutubeSearchService()
+        public MockYouTubeSearchService()
         {
         }
 
@@ -23,27 +23,27 @@ namespace MusicRoom.Core.Services.Implementations
                     new YouTubeVideoListItem
                     {
                         Title = "The Perfect Girl - Mareux",
-                        Description = "A test description",
+                        //Description = "A test description",
                         Id = "V1l6kxQNq54",
                         Uri = "https://www.youtube.com/watch?v=V1l6kxQNq54",
-                        ImageUri = "https://i.ytimg.com/vi/V1l6kxQNq54/hqdefault.jpg?sqp=-oaymwEjCOADEI4CSFryq4qpAxUIARUAAAAAGAElAADIQj0AgKJDeAE=&rs=AOn4CLBdI_PxctR8gl5Tl5Kg__WTfwU1yw"
+                        ImageUri = "https://i.ytimg.com/vi/V1l6kxQNq54/hqdefault.jpg?sqp=-oaymwEjCOA//DEI4CSFryq4qpAxUIARUAAAAAGAElAADIQj0AgKJDeAE=&rs=AOn4CLBdI_PxctR8gl5Tl5Kg__WTfwU1yw"
 
                     },
                     new YouTubeVideoListItem
                     {
                         Title = "Alberto Balsalm",
-                        Description = "Provided to YouTube by PIAS Alberto Balsalm · Aphex Twin ... I Care Because You Do",
+                        //Description = "Provided to YouTube by PIAS Alberto Balsalm · Aphex Twin ... I Care Because You Do",
                         Id= "-ZVZgCrHy5E",
                         Uri = "https://www.youtube.com/watch?v=-ZVZgCrHy5E",
-                        ImageUri ="https://i.ytimg.com/vi/-ZVZgCrHy5E/hq720.jpg?sqp=-oaymwEjCOgCEMoBSFryq4qpAxUIARUAAAAAGAElAADIQj0AgKJDeAE=&rs=AOn4CLADTJC1RU4jro74QIzs5aBFAS0aHA"
+                        ImageUri ="https://i.ytimg.com/vi/-ZVZgCrHy5E/hq720.jpg?sqp=-oaymwEjCOgCEMoBSFryq4qpAxUIARUAAAAAGAElAA//DIQj0AgKJDeAE=&rs=AOn4CLADTJC1RU4jro74QIzs5aBFAS0aHA"
                     },
                     new YouTubeVideoListItem
                     {
                         Title = "Joe Mama",
-                        Description = "",
+                        //Description = "",
                         Id = "bfOcF7Zeu6I",
                         Uri = "https://www.youtube.com/watch?v=bfOcF7Zeu6I",
-                        ImageUri = "https://i.ytimg.com/vi/bfOcF7Zeu6I/hqdefault.jpg?sqp=-oaymwEjCOADEI4CSFryq4qpAxUIARUAAAAAGAElAADIQj0AgKJDeAE=&rs=AOn4CLABtpbWPt_wJtitZzOYnFjGgVDukw",
+                        ImageUri = "https://i.ytimg.com/vi/bfOcF7Zeu6I/hqdefault.jpg?sqp=-oaymwEjCOA//DEI4CSFryq4qpAxUIARUAAAAAGAElAADIQj0AgKJDeAE=&rs=AOn4CLABtpbWPt_wJtitZzOYnFjGgVDukw",
                     },
 
                 }
@@ -59,27 +59,27 @@ namespace MusicRoom.Core.Services.Implementations
                     new YouTubeVideoListItem
                     {
                         Title = "Spongebob Squarepants - Rev Up Those Fryers",
-                        Description = "No shirt No shoes No service",
+                        //Description = "No shirt No shoes No service",
                         Id = "2L0G2G4V3T4",
                         Uri = "https://www.youtube.com/watch?v=2L0G2G4V3T4",
-                        ImageUri = "https://i.ytimg.com/vi/2L0G2G4V3T4/hqdefault.jpg?sqp=-oaymwEjCOADEI4CSFryq4qpAxUIARUAAAAAGAElAADIQj0AgKJDeAE=&rs=AOn4CLAA56Y11XNSqj6neOxaZKXbpwHn1g"
+                        ImageUri = "https://i.ytimg.com/vi/2L0G2G4V3T4/hqdefault.jpg?sqp=-oaymwEjCOA//DEI4CSFryq4qpAxUIARUAAAAAGAElAADIQj0AgKJDeAE=&rs=AOn4CLAA56Y11XNSqj6neOxaZKXbpwHn1g"
 
                     },
                     new YouTubeVideoListItem
                     {
-                        Title = "Spongebob I Heart Dancing",
-                        Description = "",
+                        Title = "Spongebob I Heart //Dancing",
+                        //Description = "",
                         Id= "-ZVZgCrHy5E",
                         Uri = "https://www.youtube.com/watch?v=up2JZwy18eY",
-                        ImageUri ="https://i.ytimg.com/vi/up2JZwy18eY/hqdefault.jpg?sqp=-oaymwEjCOADEI4CSFryq4qpAxUIARUAAAAAGAElAADIQj0AgKJDeAE=&rs=AOn4CLAIZNG5DX6mo_sHZSbv3rfAjVfv0A"
+                        ImageUri ="https://i.ytimg.com/vi/up2JZwy18eY/hqdefault.jpg?sqp=-oaymwEjCOA//DEI4CSFryq4qpAxUIARUAAAAAGAElAADIQj0AgKJDeAE=&rs=AOn4CLAIZNG5DX6mo_sHZSbv3rfAjVfv0A"
                     },
                     new YouTubeVideoListItem
                     {
                         Title = "Have you finished those errands?",
-                        Description = "This is reuploaded because I got terminated in my old youtube channel",
+                        //Description = "This is reuploaded because I got terminated in my old youtube channel",
                         Id = "jKnSVLaSsZI",
                         Uri = "https://www.youtube.com/watch?v=jKnSVLaSsZI",
-                        ImageUri = "https://i.ytimg.com/vi/jKnSVLaSsZI/hq720.jpg?sqp=-oaymwEjCOgCEMoBSFryq4qpAxUIARUAAAAAGAElAADIQj0AgKJDeAE=&rs=AOn4CLDbSKRQ7stVqhO_nYvy5aAsRIAsE…g",
+                        ImageUri = "https://i.ytimg.com/vi/jKnSVLaSsZI/hq720.jpg?sqp=-oaymwEjCOgCEMoBSFryq4qpAxUIARUAAAAAGAElAA//DIQj0AgKJDeAE=&rs=AOn4CLDbSKRQ7stVqhO_nYvy5aAsRIAsE…g",
                     },
 
                 }

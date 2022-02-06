@@ -6,12 +6,11 @@
     xmlns:mvx="clr-namespace:MvvmCross.Forms.Bindings;assembly=MvvmCross.Forms"
     xmlns:local="clr-namespace:MusicRoom.UI.Pages"
     x:Class="MusicRoom.UI.Pages.HomePage"
-    xmlns:viewModels="clr-namespace:MusicRoom.Core.ViewModels.Home;assembly=MusicRoom.Core"
+    xmlns:viewModels="clr-namespace:MusicRoom.Core.ViewModels.Home;assembly=MusicRoom.Core" xmlns:behavior="clr-namespace:MusicRoom.UI.Behaviors"
                       Title="Main page">
     <ContentPage.Content>
         <StackLayout>
-            <Button Text="Connect" mvx:Bi.nd="Clicked ConnectAsyncCommand"/>
-            <Label Text="Search Track"
+            <Label mvx:Bi.nd="Text VideoCount"
                 VerticalOptions="CenterAndExpand" 
                 HorizontalOptions="CenterAndExpand" />
             <Entry 
@@ -19,21 +18,30 @@
                 HorizontalOptions="CenterAndExpand"
                 WidthRequest="200"
 		        x:Name="TrackQueryEntry" 
-		        mvx:Bi.nd="Text TrackQuery, Mode=TwoWay"/>
+		        mvx:Bi.nd="Text VideoQuery, Mode=TwoWay"/>
             <Button Text="Search" mvx:Bi.nd="Clicked SearchAsyncCommand"/>
+	        <Label VerticalOptions="CenterAndExpand" 
+		        HorizontalOptions="CenterAndExpand"
+		        Text="Loading" mvx:Bi.nd="IsVisible IsLoading" />
             <ScrollView>
-			    <ListView ItemsSource="{Binding Tracks}" SelectedItem="{Binding Track}"> 
+			    <views:MvxListView 
+					VerticalOptions="CenterAndExpand" 
+					HorizontalOptions="CenterAndExpand"
+                    ItemClick="{mvx:MvxBind PlayVideoAsyncCommand}"
+		            ItemsSource="{Binding VideoList}" 
+		            SelectedItem="{Binding Video}"> 
 				    <ListView.ItemTemplate>
 					    <DataTemplate>
 							<ImageCell
-			                ImageSource="{Binding ImageUrl}" 
-                            Text="{Binding Name}"
-                            Detail="{Binding Artists}"
-                            mvx:Bi.nd="Tapped PlaySongAsyncCommand"
-			                />
+			                ImageSource="{Binding ImageUri}" 
+                            Text="{Binding Title}"
+                            Detail="{Binding Author}" />
                         </DataTemplate>
 					</ListView.ItemTemplate> 
-				</ListView>
+				    <ListView.Behaviors>  
+					    <behavior:InfiniteScroll LoadMoreCommand="{Binding GetNextPageCommand}" />  
+					</ListView.Behaviors>
+				</views:MvxListView>
 		    </ScrollView>
         </StackLayout>
     </ContentPage.Content>
