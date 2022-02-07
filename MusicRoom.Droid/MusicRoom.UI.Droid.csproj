@@ -74,6 +74,7 @@
     <Compile Include="Setup.cs" />
     <Compile Include="Views\MainActivity.cs" />
     <Compile Include="Views\SplashActivity.cs" />
+    <Compile Include="Views\YouTubeAndroidView.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProguardConfiguration Include="proguard.cfg" />
@@ -148,6 +149,10 @@
     <ProjectReference Include="..\MusicRoom.Core\MusicRoom.Core.csproj">
       <Project>{DA64BBD5-9059-4238-9F2B-624F52528DC4}</Project>
       <Name>MusicRoom.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MusicRoom.Libraris.YouTubePlayer.Droid\MusicRoom.Libraries.YouTubePlayer.Droid.csproj">
+      <Project>{7251f778-50df-44de-bc43-146e5ede875d}</Project>
+      <Name>MusicRoom.Libraries.YouTubePlayer.Droid</Name>
     </ProjectReference>
     <ProjectReference Include="..\MusicRoom.UI\MusicRoom.UI.csproj">
       <Project>{5C457D80-923C-458E-A514-0E814FE85FB4}</Project>

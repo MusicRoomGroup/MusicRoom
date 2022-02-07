@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +11,7 @@ using Android.Views;
 using Android.Widget;
 using MvvmCross.Forms.Platforms.Android.Views;
 using MusicRoom.Core.ViewModels.Main;
+using Com.Google.Android.Youtube.Player;
 
 namespace MusicRoom.Droid
 {
@@ -22,7 +23,6 @@ namespace MusicRoom.Droid
         {
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
-
             base.OnCreate(bundle);
         }
     }

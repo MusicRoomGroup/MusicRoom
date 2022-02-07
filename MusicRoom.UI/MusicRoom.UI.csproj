@@ -46,4 +46,9 @@
   <ItemGroup>
     <Folder Include="Behaviors\" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="Pages\YouTubePlayerView.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
 </Project>

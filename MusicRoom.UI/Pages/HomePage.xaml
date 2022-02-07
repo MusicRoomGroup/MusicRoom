@@ -10,6 +10,7 @@
                       Title="Main page">
     <ContentPage.Content>
         <StackLayout>
+            <local: YouTubePlayerView/>
             <Label mvx:Bi.nd="Text VideoCount"
                 VerticalOptions="CenterAndExpand" 
                 HorizontalOptions="CenterAndExpand" />
