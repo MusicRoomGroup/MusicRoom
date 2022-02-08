@@ -1,6 +1,3 @@
-using System;
-using System.IO;
-using Foundation;
 using MusicRoom.UI.CustomViews;
 using Xamarin.Forms;
 
