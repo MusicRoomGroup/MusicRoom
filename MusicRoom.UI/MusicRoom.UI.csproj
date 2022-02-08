@@ -27,6 +27,8 @@
   <ItemGroup>
     <None Remove="Xamarin.Essentials" />
     <None Remove="Behaviors\" />
+    <None Remove="CustomViews\" />
+    <None Remove="Xamarin.iOS" />
   </ItemGroup>
   <ItemGroup>
     <None Update="App.xaml">
@@ -45,5 +47,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Behaviors\" />
+    <Folder Include="CustomViews\" />
   </ItemGroup>
 </Project>
