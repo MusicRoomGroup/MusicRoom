@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using Foundation;
+using MusicRoom.UI.CustomViews;
 using Xamarin.Forms;
 
 namespace MusicRoom.UI.Pages
@@ -12,7 +13,7 @@ namespace MusicRoom.UI.Pages
             BuildPage();
         }
 
-        public WebView BuildWebView()
+        public HybridWebView BuildWebView()
         {
 			var baseHtml = @"<html><body><h1 style=""font-size=300px"">This is a test</h1></body></html>";
             var headerString = "<header><meta name='viewport' content='width=device-width, initial-scale=2.0, maximum-scale=5.0, minimum-scale=1.0, user-scalable=no'><style>img{max-width:100%}</style></header>";
@@ -23,13 +24,13 @@ namespace MusicRoom.UI.Pages
                 Html = youtubeHtml
             };
 
-            var webView = new WebView
+            var webView = new HybridWebView
             {
                 HeightRequest=283,
                 WidthRequest=375,
                 VerticalOptions=LayoutOptions.FillAndExpand,
                 HorizontalOptions=LayoutOptions.FillAndExpand,
-                Source = new Uri("https://www.google.com"),
+                Uri = "Hybrid.html"
             };
 
             return webView;
@@ -37,7 +38,7 @@ namespace MusicRoom.UI.Pages
 
         public void BuildPage()
         {
-            WebView webView = BuildWebView();
+            HybridWebView webView = BuildWebView();
 
             Content = new StackLayout
             {

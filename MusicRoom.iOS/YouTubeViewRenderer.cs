@@ -13,8 +13,14 @@ namespace MusicRoom.iOS
     {
         private const string JavaScriptFunction = "function invokeCSharpAction(data){window.webkit.messageHandlers.invokeAction.postMessage(data);}";
         private readonly WKUserContentController _userController;
+        private static readonly WKWebViewConfiguration Config = new WKWebViewConfiguration
+        {
+            AllowsInlineMediaPlayback = true,
+            MediaPlaybackRequiresUserAction = false,
+            AllowsPictureInPictureMediaPlayback = true
+        };
 
-        public HybridWebViewRenderer() : this(new WKWebViewConfiguration())
+        public HybridWebViewRenderer() : this(Config)
         {
         }
 
@@ -40,7 +46,8 @@ namespace MusicRoom.iOS
 
             if (e.NewElement != null)
             {
-                var filename = Path.Combine(NSBundle.MainBundle.BundlePath, $"Content/{((HybridWebView)Element).Uri}");
+                //var filename = Path.Combine(NSBundle.MainBundle.BundlePath, $"Content/{((HybridWebView)Element).Uri}");
+                var filename = Path.Combine(NSBundle.MainBundle.BundlePath, ((HybridWebView)Element).Uri);
                 LoadRequest(new NSUrlRequest(new NSUrl(filename, false)));
             }
         }
