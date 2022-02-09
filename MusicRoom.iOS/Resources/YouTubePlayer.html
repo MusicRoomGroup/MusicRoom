@@ -1,11 +1,11 @@
 ﻿<!DOCTYPE html>
 <header>
     <meta name='viewport' content='width=device-width'>
+    <meta name="introduction" content="no-reference">
 </header>
 <html>
 <body>
     <div id="player" style="pointer-events: none"></div>
-
     <script>
         var tag = document.createElement('script');
 
@@ -32,30 +32,15 @@
             });
         }
 
-        function onPlayerReady(event) {
-            event.target.playVideo();
-        }
+        const onPlayerReady = event => event.target.playVideo();
 
-        function clickedButton() {
-            player.playVideo();
-            document.getElementById("test").innerHTML = "hit play";
-	      }
-
-        var done = false;
-        function onPlayerStateChange(event) {
-						event.preventDefault();
-            return;
+        const onPlayerStateChange = event => {
             if (event.data == YT.PlayerState.PLAYING && !done) {
-                setTimeout(stopVideo, 6000);
-                done = true;
+                // placeholder
             }
-            if (event.data == YT.PlayerState.PAUSED) {
-                event.preventDefault();
-                return;
-	          }
         }
-        function stopVideo() {
-            player.stopVideo();
-        }</script>
+
+        const stopVideo = () => player.stopVideo();
+    </script>
 </body>
 </html>

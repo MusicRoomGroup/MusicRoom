@@ -46,7 +46,6 @@ namespace MusicRoom.iOS
 
             if (e.NewElement != null)
             {
-                //var filename = Path.Combine(NSBundle.MainBundle.BundlePath, $"Content/{((HybridWebView)Element).Uri}");
                 var filename = Path.Combine(NSBundle.MainBundle.BundlePath, ((HybridWebView)Element).Uri);
                 LoadRequest(new NSUrlRequest(new NSUrl(filename, false)));
             }
@@ -65,28 +64,5 @@ namespace MusicRoom.iOS
             }
             base.Dispose(disposing);
         }        
-    }
-
-    public class MyNavigationDelegate : WKNavigationDelegate
-    {
-        public override void DidFinishNavigation(WKWebView webView, WKNavigation navigation)
-        {
-            string fontSize = "200%"; // > 100% shows larger than previous
-            string stringsss = string.Format("document.getElementsByTagName('body')[0].style.webkitTextSizeAdjust= '{0}'", fontSize);
-            WKJavascriptEvaluationResult handler = (NSObject result, NSError err) =>
-            {
-                if (err != null)
-                {
-                    System.Console.WriteLine(err);
-                }
-                if (result != null)
-                {
-                    System.Console.WriteLine(result);
-                }
-            };
-            webView.EvaluateJavaScript(stringsss, handler);
-            //base.DidFinishNavigation(webView, navigation);
-        }
-
     }
 }

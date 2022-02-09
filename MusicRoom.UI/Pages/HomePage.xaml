@@ -10,7 +10,9 @@
                       Title="Main page">
     <ContentPage.Content>
         <StackLayout>
-			<local:HybridWebViewPage 
+			<local1:HybridWebView 
+                mvx:Bi.nd="Uri Uri"
+                x:Name="YouTubePlayer"
                 VerticalOptions="FillAndExpand" 
                 HorizontalOptions="FillAndExpand"
 		        HeightRequest="493" 

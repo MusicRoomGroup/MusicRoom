@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using MusicRoom.Core.Models;
@@ -10,6 +11,8 @@ namespace MusicRoom.Core.ViewModels.Home
 {
     public class HomeViewModel : BaseViewModel
     {
+        public string Uri { get; } = "YouTubePlayer.html";
+
         private string _videoQuery;
         public string VideoQuery
         {
@@ -104,6 +107,11 @@ namespace MusicRoom.Core.ViewModels.Home
             await base.Initialize();
         }
 
+        private MvxInteraction<string> _interaction =
+            new MvxInteraction<string>();
+
+        public IMvxInteraction<string> Interaction => _interaction;
+
         public IMvxCommand SearchAsyncCommand
             => new MvxAsyncCommand(SearchAsync);
 
@@ -127,7 +135,8 @@ namespace MusicRoom.Core.ViewModels.Home
 
         private async Task PlayAsync(YouTubeVideoListItem video)
         {
-            await Browser.OpenAsync(video.Uri);
+
+			_interaction.Raise(Video.Id);
 	    }
 
         private async Task GetNextPageAsync()

@@ -1,11 +1,30 @@
 using System;
+using MvvmCross.Base;
+using MvvmCross.ViewModels;
 using Xamarin.Forms;
 
 namespace MusicRoom.UI.CustomViews
 {
     public class HybridWebView : WebView
     {
-        private Action<string> _action;
+        private IMvxInteraction<string> _interaction;
+        public IMvxInteraction<string> Interaction
+        {
+            get => _interaction;
+            set
+            {
+                if (_interaction != null)
+                    _interaction.Requested -= OnInteractionRequestedAsync;
+
+                _interaction = value;
+                _interaction.Requested += OnInteractionRequestedAsync;
+            }
+        }
+
+        public void Cleanup()
+        {
+            Interaction = null;	
+	    }
 
         public static readonly BindableProperty UriProperty = BindableProperty.Create(
             propertyName: "Uri",
@@ -19,23 +38,25 @@ namespace MusicRoom.UI.CustomViews
             set => SetValue(UriProperty, value);
         }
 
-        public void RegisterAction(Action<string> callback)
+        private async void OnInteractionRequestedAsync(object sender, MvxValueEventArgs<string> eventArgs)
         {
-            _action = callback;
+            InvokeAction(eventArgs.Value);
         }
 
-        public void Cleanup()
+        public async void InvokeAction(string data)
         {
-            _action = null;
-        }
+			if (Interaction == null || data == null)
+			{
+			    return;
+			}
 
-        public void InvokeAction(string data)
-        {
-            if (_action == null || data == null)
-            {
-                return;
-            }
-            _action.Invoke(data);
+            await EvaluateJavaScriptAsync($"player.stopVideo()");
+            await EvaluateJavaScriptAsync($"player.loadVideoById(\"{data}\", 0)");
+            await EvaluateJavaScriptAsync($"player.playVideo()");
+            //await EvaluateJavaScriptAsync(
+            //    @$"player.stopVideo();
+            //       player.loadVideoById(""{data}"", 0);
+            //       player.playVideo();");
         }
     }
 }
