@@ -5,7 +5,7 @@
 </header>
 <html>
 <body>
-  <div id="player"></div> 
+  <div id="player" style="pointer-events: none"></div> 
   <script>
     var tag = document.createElement('script');
 
@@ -36,7 +36,7 @@
 
     const onPlayerStateChange = event => {
       if (event.data == YT.PlayerState.PLAYING && !done) {
-        // placeholder style="pointer-events: none"
+        // placeholder 
       }
     }
 

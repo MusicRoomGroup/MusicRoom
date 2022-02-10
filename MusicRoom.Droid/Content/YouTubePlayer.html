@@ -5,7 +5,7 @@
 </header>
 <html>
 <body>
-  <div id="player" style="pointer-events: none"></div>
+  <div id="player" ></div>
   <script>
     var tag = document.createElement('script');
 
@@ -21,7 +21,7 @@
         videoId: 'T_-jjh2sX4Q',
         playerVars: {
           'playsinline': 1,
-          'controls': 1,
+          'controls': 0,
           'autoplay': 1,
           'modestbranding': 1
         },
@@ -36,7 +36,7 @@
 
     const onPlayerStateChange = event => {
       if (event.data == YT.PlayerState.PLAYING && !done) {
-        // placeholder
+        // placeholder style="pointer-events: none"
       }
     }
 

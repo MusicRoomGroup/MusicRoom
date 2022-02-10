@@ -16,25 +16,25 @@ namespace MusicRoom.Droid
     {
         const string JavascriptFunction = "function invokeCSharpAction(data){jsBridge.invokeAction(data);}";
         Context _context;
-
-       // private readonly IWebViewController _userController;
-       // private static readonly WebSettings webSettings;
+        static WebSettings webSettings;
         public HybridWebViewRenderer(Context context) : base(context)
         {
             _context = context;
         }
 
-        //public HybridWebViewRenderer(Context context, WebSettings webSettings) : base(context)
-        //{
-        //    webSettings.MediaPlaybackRequiresUserGesture = true;
-        //}
+        /*public HybridWebViewRenderer(Context context, WebSettings webSettings) : base(context)
+        {
+            webSettings.MediaPlaybackRequiresUserGesture = false;
+        }*/
 
         protected override void OnElementChanged(ElementChangedEventArgs<Xamarin.Forms.WebView> e)
         {
             base.OnElementChanged(e);
 
+            Control.Settings.MediaPlaybackRequiresUserGesture = false;
             if (e.OldElement != null)
             {
+                
                 Control.RemoveJavascriptInterface("jsBridge");
                 ((HybridWebView)Element).Cleanup();
             }
