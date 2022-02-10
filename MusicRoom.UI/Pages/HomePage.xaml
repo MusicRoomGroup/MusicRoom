@@ -6,10 +6,17 @@
     xmlns:mvx="clr-namespace:MvvmCross.Forms.Bindings;assembly=MvvmCross.Forms"
     xmlns:local="clr-namespace:MusicRoom.UI.Pages"
     x:Class="MusicRoom.UI.Pages.HomePage"
-    xmlns:viewModels="clr-namespace:MusicRoom.Core.ViewModels.Home;assembly=MusicRoom.Core" xmlns:behavior="clr-namespace:MusicRoom.UI.Behaviors"
+    xmlns:viewModels="clr-namespace:MusicRoom.Core.ViewModels.Home;assembly=MusicRoom.Core" xmlns:behavior="clr-namespace:MusicRoom.UI.Behaviors" xmlns:local1="clr-namespace:MusicRoom.UI.CustomViews"
                       Title="Main page">
     <ContentPage.Content>
         <StackLayout>
+			<local1:HybridWebView 
+                mvx:Bi.nd="Uri Uri"
+                x:Name="YouTubePlayer"
+                VerticalOptions="FillAndExpand" 
+                HorizontalOptions="FillAndExpand"
+		        HeightRequest="493" 
+		        WidthRequest="375" />
             <Label mvx:Bi.nd="Text VideoCount"
                 VerticalOptions="CenterAndExpand" 
                 HorizontalOptions="CenterAndExpand" />

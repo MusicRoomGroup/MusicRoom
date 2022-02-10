@@ -8,6 +8,7 @@ using MvvmCross.Forms.Views;
 using MusicRoom.Core.ViewModels.Home;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using MusicRoom.UI.CustomViews;
 
 namespace MusicRoom.UI.Pages
 {
@@ -29,6 +30,16 @@ namespace MusicRoom.UI.Pages
                 navigationPage.BarTextColor = Color.White;
                 navigationPage.BarBackgroundColor = (Color)Application.Current.Resources["PrimaryColor"];
             }
+        }
+
+        protected override void OnViewModelSet()
+        {
+			base.OnViewModelSet();
+            using var set = CreateBindingSet();
+            HybridWebView player = this.FindByName<HybridWebView>("YouTubePlayer");
+            set.Bind(player)
+                .For(v => v.Interaction)
+                .To(vm => vm.Interaction);
         }
     }
 }
