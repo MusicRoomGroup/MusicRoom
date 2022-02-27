@@ -4,6 +4,8 @@ using MusicRoom.Core.ViewModels.Home;
 using MvvmCross;
 using MusicRoom.Core.Services.Interfaces;
 using MusicRoom.Core.Services.Implementations;
+using MusicRoom.ChatClient.Intefaces;
+using MusicRoom.ChatClient.Implementation;
 
 namespace MusicRoom.Core
 {
@@ -16,6 +18,7 @@ namespace MusicRoom.Core
                 .AsInterfaces()
                 .RegisterAsLazySingleton();
 
+            Mvx.IoCProvider.RegisterType<IChatClient, RoomChatClient>();
             Mvx.IoCProvider.RegisterType<IYoutubeSearchService, YouTubeSearchService>();
 
             RegisterAppStart<HomeViewModel>();

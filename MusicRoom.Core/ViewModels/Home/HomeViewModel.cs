@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using MusicRoom.Core.Models;
 using MusicRoom.Core.Services.Interfaces;
 using MvvmCross.Commands;
+using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
 using Xamarin.Essentials;
 
@@ -97,9 +98,13 @@ namespace MusicRoom.Core.ViewModels.Home
 
         private readonly IYoutubeSearchService _youtube;
 
-        public HomeViewModel(IYoutubeSearchService youtube)
+        private readonly IMvxNavigationService _navMan;
+
+        public HomeViewModel(IYoutubeSearchService youtube, IMvxNavigationService navMan)
         {
             _youtube = youtube;
+
+            _navMan = navMan;
         }
 
         public override async Task Initialize()
@@ -120,6 +125,9 @@ namespace MusicRoom.Core.ViewModels.Home
 
         public IMvxCommand GetNextPageCommand
             => new MvxAsyncCommand(GetNextPageAsync);
+
+		public IMvxCommand GoToChatCommand 
+		    => new MvxAsyncCommand(async () => await _navMan.Navigate<ChatViewModel>());
 
         private async Task SearchAsync()
         {

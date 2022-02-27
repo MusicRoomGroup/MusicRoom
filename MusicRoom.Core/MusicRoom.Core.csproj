@@ -28,4 +28,7 @@
     <Folder Include="Services\Implementations\" />
     <Folder Include="Models\" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MusicRoom.Domain\MusicRoom.ChatClient.csproj" />
+  </ItemGroup>
 </Project>
