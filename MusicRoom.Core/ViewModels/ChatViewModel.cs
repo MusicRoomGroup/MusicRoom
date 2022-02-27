@@ -1,6 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using MusicRoom.ChatClient.Intefaces;
+using MusicRoom.SignalRClient.Interfaces;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
 
@@ -19,17 +20,27 @@ namespace MusicRoom.Core.ViewModels
             }
 	    }
 
-        public MvxObservableCollection<string> Messages
-			=> new MvxObservableCollection<string>(_chatClient.RecievedMessages);
+        public override async Task Initialize() 
+	    {
+            await _chatService.StartAsync();	
+	    }
 
-        private readonly IChatClient _chatClient;
+        public MvxObservableCollection<string> Messages { get; set; } = new MvxObservableCollection<string>();
 
-        public ChatViewModel(IChatClient chatClient)
+        private readonly IChatService _chatService;
+
+        public ChatViewModel(IChatService chatService)
         {
-            _chatClient = chatClient;
+            _chatService = chatService;
+            _chatService.OnReceivedMessage += _chatService_OnReceivedMessage;
         }
 
-        public bool IsConnected => _chatClient.IsConnected();
+        private void _chatService_OnReceivedMessage(object sender, string e)
+        {
+            Messages.Add(e);
+        }
+
+        public bool IsConnected => _chatService.IsConnected();
 
         public IMvxCommand SendMessageCommand
             => new MvxAsyncCommand(SendMessageAsync);
@@ -38,7 +49,7 @@ namespace MusicRoom.Core.ViewModels
         {
             if (!IsConnected) return;
 
-            await _chatClient.SendMessage("joe", ChatMessage);
+            await _chatService.SendMessage("joe", ChatMessage);
         }
     }
 }

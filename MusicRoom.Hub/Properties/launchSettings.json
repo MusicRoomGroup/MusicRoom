@@ -19,8 +19,7 @@
     },
     "MusicRoom.Hub": {
       "commandName": "Project",
-      "launchBrowser": true,
-      "launchUrl": "weatherforecast",
+      "launchBrowser": false,
       "applicationUrl": "https://localhost:35132;http://localhost:56744",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"

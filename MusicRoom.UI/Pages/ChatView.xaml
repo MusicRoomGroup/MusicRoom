@@ -14,21 +14,10 @@
                 <Label Text="Welcome to Xamarin.Forms!"
                 VerticalOptions="CenterAndExpand" 
                 HorizontalOptions="CenterAndExpand" />
-                
             <views:MvxListView 
 					VerticalOptions="CenterAndExpand" 
 					HorizontalOptions="CenterAndExpand"
 		            ItemsSource="{Binding Messages}" >
-            
-                <!--<ListView.ItemTemplate>
-                <DataTemplate>
-                    <TextCell
-                        Text="{Binding Messages}" 
-                        TextColor="Red"
-                        Detail="I am secondary"
-                        DetailColor="Blue"/>
-                </DataTemplate>
-                </ListView.ItemTemplate>-->
             </views:MvxListView>
             <Entry 
                 VerticalOptions="CenterAndExpand" 

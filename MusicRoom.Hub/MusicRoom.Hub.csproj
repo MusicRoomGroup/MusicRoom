@@ -1,18 +1,18 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <UserSecretsId>aspnet-MusicRoom.Hub-4877CEFE-3BC0-42D0-8F68-F0C28187C478</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.2" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="6.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.13" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="5.0.13" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Common" Version="5.0.14" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.JSON" Version="5.0.14" />
     <PackageReference Include="Microsoft.Identity.Web" Version="1.1.0" />
-    <PackageReference Include="Microsoft.AspNetCore.SignalR.Common" Version="6.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Core" Version="1.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
-    <PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.Json" Version="6.0.2" />
   </ItemGroup>
 
   <ItemGroup>
@@ -26,7 +26,7 @@
     <Folder Include="Hubs\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MusicRoom.Domain\MusicRoom.ChatClient.csproj">
+    <ProjectReference Include="..\MusicRoom.Domain\MusicRoom.SignalRClient.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
   </ItemGroup>

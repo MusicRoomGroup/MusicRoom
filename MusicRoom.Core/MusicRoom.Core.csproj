@@ -29,6 +29,6 @@
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MusicRoom.Domain\MusicRoom.ChatClient.csproj" />
+    <ProjectReference Include="..\MusicRoom.Domain\MusicRoom.SignalRClient.csproj" />
   </ItemGroup>
 </Project>

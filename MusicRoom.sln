@@ -14,7 +14,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicRoom.API.Tests.CLI", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicRoom.Core", "MusicRoom.Core\MusicRoom.Core.csproj", "{DA64BBD5-9059-4238-9F2B-624F52528DC4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicRoom.UI", "MusicRoom.UI\MusicRoom.UI.csproj", "{5C457D80-923C-458E-A514-0E814FE85FB4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicRoom.UI", "MusicRoom.UI\MusicRoom.UI.csproj", "{5C457D80-923C-458E-A514-0E814FE85FB4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicRoom.UI.iOS", "MusicRoom.iOS\MusicRoom.UI.iOS.csproj", "{C7EFDE99-60D9-4119-B609-847C2CC7B57C}"
 EndProject
@@ -28,7 +28,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Musicroom.Client", "Musicro
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MuiscRoom.RoomsManagement", "MuiscRoom.RoomsManagement", "{F1294F59-3F0C-4296-A621-B9D687D436CA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicRoom.ChatClient", "MusicRoom.Domain\MusicRoom.ChatClient.csproj", "{82107B63-7F92-4C76-B6E2-014F8FE3784D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicRoom.SignalRClient", "MusicRoom.Domain\MusicRoom.SignalRClient.csproj", "{82107B63-7F92-4C76-B6E2-014F8FE3784D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicRoom.Hub", "MusicRoom.Hub\MusicRoom.Hub.csproj", "{3A60DEAE-55A5-4503-8CA7-75B607ABC546}"
 EndProject

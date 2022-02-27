@@ -25,18 +25,13 @@ namespace MusicRoom.Hub
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            //    .AddMicrosoftIdentityWebApi(Configuration.GetSection("AzureAdB2C"));
-
             services.AddSignalR();
 
             services.AddControllers();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -44,7 +39,8 @@ namespace MusicRoom.Hub
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
+            //disable on local mobile testing
+            //app.UseHttpsRedirection();
 
             app.UseRouting();
 
