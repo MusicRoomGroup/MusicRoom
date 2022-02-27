@@ -23,7 +23,7 @@ namespace MusicRoom.ChatClient.Implementation
 
         public List<string> RecievedMessages { get; private set; } = new List<string>();
 
-        public bool IsConnected() => _connection.ConnectionId is not null;
+        public bool IsConnected() => _connection.ConnectionId != null;
 
         public async Task SendMessage(string user, string message)
             => await _connection.SendAsync("ReceiveMessage", user, message);

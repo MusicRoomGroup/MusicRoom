@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<views:MvxContentPage 
+             x:TypeArguments="viewModels:ChatViewModel"
+             xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:views="clr-namespace:MvvmCross.Forms.Views;assembly=MvvmCross.Forms"
+             xmlns:mvx="clr-namespace:MvvmCross.Forms.Bindings;assembly=MvvmCross.Forms"
+             x:Class="MusicRoom.UI.Pages.ChatView"
+             xmlns:viewModels="clr-namespace:MusicRoom.Core.ViewModels;assembly=MusicRoom.Core" xmlns:behavior="clr-namespace:MusicRoom.UI.Behaviors" xmlns:local1="clr-namespace:MusicRoom.UI.CustomViews"
+                      Title="HE'S BACK">
+        <ContentPage.Content>
+            <StackLayout>
+                <Label Text="Welcome to Xamarin.Forms!"
+                VerticalOptions="CenterAndExpand" 
+                HorizontalOptions="CenterAndExpand" />
+                
+            <views:MvxListView 
+					VerticalOptions="CenterAndExpand" 
+					HorizontalOptions="CenterAndExpand"
+		            ItemsSource="{Binding Messages}" >
+            
+                <!--<ListView.ItemTemplate>
+                <DataTemplate>
+                    <TextCell
+                        Text="{Binding Messages}" 
+                        TextColor="Red"
+                        Detail="I am secondary"
+                        DetailColor="Blue"/>
+                </DataTemplate>
+                </ListView.ItemTemplate>-->
+            </views:MvxListView>
+            <Entry 
+                VerticalOptions="CenterAndExpand" 
+                HorizontalOptions="CenterAndExpand"
+                WidthRequest="200"
+		        x:Name="TrackQueryEntry" 
+		        mvx:Bi.nd="Text ChatMessage, Mode=TwoWay"/>
+            <Button Text="Message here..." mvx:Bi.nd="Clicked SendMessageCommand"/>
+        </StackLayout>
+        </ContentPage.Content>
+</views:MvxContentPage>
