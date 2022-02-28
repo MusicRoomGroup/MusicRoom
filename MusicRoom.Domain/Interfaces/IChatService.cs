@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using MusicRoom.SignalRClient.Models;
 
 namespace MusicRoom.SignalRClient.Interfaces
 {
@@ -10,8 +11,8 @@ namespace MusicRoom.SignalRClient.Interfaces
 
 	    bool IsConnected();
 
-        Task SendMessage(string user, string message);
+        Task SendMessage(ChatMessage message);
 
-        event EventHandler<string> OnReceivedMessage;
+        event EventHandler<ChatMessage> OnReceivedMessage;
     }
 }

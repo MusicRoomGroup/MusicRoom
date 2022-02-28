@@ -18,13 +18,20 @@
 					VerticalOptions="CenterAndExpand" 
 					HorizontalOptions="CenterAndExpand"
 		            ItemsSource="{Binding Messages}" >
+				    <ListView.ItemTemplate>
+					    <DataTemplate>
+							<TextCell
+                            Text="{Binding Message}"
+                            Detail="{Binding User}" />
+                        </DataTemplate>
+					</ListView.ItemTemplate> 
             </views:MvxListView>
             <Entry 
                 VerticalOptions="CenterAndExpand" 
                 HorizontalOptions="CenterAndExpand"
                 WidthRequest="200"
 		        x:Name="TrackQueryEntry" 
-		        mvx:Bi.nd="Text ChatMessage, Mode=TwoWay"/>
+		        mvx:Bi.nd="Text Message, Mode=TwoWay"/>
             <Button Text="Message here..." mvx:Bi.nd="Clicked SendMessageCommand"/>
         </StackLayout>
         </ContentPage.Content>
