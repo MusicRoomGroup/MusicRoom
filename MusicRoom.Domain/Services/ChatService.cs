@@ -18,13 +18,12 @@ namespace MusicRoom.SignalRClient.Services
                 .WithAutomaticReconnect()
                 .Build();
 
-            _connection.On<string, string>("ReceiveMessage", (user, message) 
-		        => OnReceivedMessage?.Invoke(this, new ChatMessage
-					{
-					    Id = Guid.NewGuid(),
-					    User = user,
-					    Message = message
-					} ));
+            _connection.On<string, string>("ReceiveMessage", 
+		        (user, message) => OnReceivedMessage?
+		            .Invoke(this, new ChatMessage 
+		            { Id = Guid.NewGuid(),
+					  User = user,
+					  Message = message } ));
         }
 
         private readonly HubConnection _connection;
@@ -32,9 +31,12 @@ namespace MusicRoom.SignalRClient.Services
         public bool IsConnected() => _connection.ConnectionId != null;
 
         public async Task SendMessage(ChatMessage message)
-            => await _connection.SendAsync("SendMessage", message.User, message.Message);
+            => await _connection.SendAsync("SendMessage", message.GroupId, message.User, message.Message);
 
-        public async Task StartAsync()
-            => await _connection.StartAsync();
+        public async Task StartAsync(Guid groupId)
+        {
+            await _connection.StartAsync();
+            await _connection.SendAsync("AddToGroupAsync", groupId);
+        }
     }
 }

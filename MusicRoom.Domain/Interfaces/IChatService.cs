@@ -7,7 +7,7 @@ namespace MusicRoom.SignalRClient.Interfaces
 {
     public interface IChatService
     {
-	    Task StartAsync();
+        Task StartAsync(Guid groupId);
 
 	    bool IsConnected();
 

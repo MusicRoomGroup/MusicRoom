@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using MusicRoom.SignalRClient.Interfaces;
 using MusicRoom.SignalRClient.Models;
@@ -18,8 +17,9 @@ namespace MusicRoom.Core.ViewModels
             _chatService.OnReceivedMessage += _chatService_OnReceivedMessage;
         }
 
-        private ChatMessage ChatMessage { get; set; } = new ChatMessage()
+        private ChatMessage ChatMessage { get; set; } = new ChatMessage
         {
+            GroupId = Guid.NewGuid(),
             User = "Joe"
         };
 
@@ -35,13 +35,10 @@ namespace MusicRoom.Core.ViewModels
             }
 	    }
 
-        public override async Task Initialize() 
-	    {
-            await _chatService.StartAsync();	
-	    }
-
         public MvxObservableCollection<ChatMessage> Messages { get; set; } 
 	        = new MvxObservableCollection<ChatMessage>();
+
+        public override async Task Initialize() => await _chatService.StartAsync(ChatMessage.GroupId);	
 
         private void _chatService_OnReceivedMessage(object sender, ChatMessage e) => Messages.Add(e);
 
@@ -51,9 +48,10 @@ namespace MusicRoom.Core.ViewModels
 
         private async Task SendMessageAsync()
         {
-            if (!IsConnected) return;
-
-            await _chatService.SendMessage(ChatMessage);
+            if (IsConnected)
+            {
+                await _chatService.SendMessage(ChatMessage);
+            }
         }
     }
 }
