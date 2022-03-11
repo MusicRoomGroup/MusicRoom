@@ -1,14 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 
-<views:MvxContentPage 
-             x:TypeArguments="viewModels:ChatViewModel"
+<xamForms:ReactiveContentPage
+             x:Class="MusicRoom.UI.Pages.ChatView"
+             x:TypeArguments="vm:ChatViewModel"
+             xmlns:vm="clr-namespace:MusicRoom.Core.ViewModels;assembly=MusicRoom.Core" 
              xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:rxui="clr-namespace:ReactiveUI.XamForms;assembly=ReactiveUI.XamForms"
              xmlns:views="clr-namespace:MvvmCross.Forms.Views;assembly=MvvmCross.Forms"
              xmlns:mvx="clr-namespace:MvvmCross.Forms.Bindings;assembly=MvvmCross.Forms"
-             x:Class="MusicRoom.UI.Pages.ChatView"
              xmlns:viewModels="clr-namespace:MusicRoom.Core.ViewModels;assembly=MusicRoom.Core" xmlns:behavior="clr-namespace:MusicRoom.UI.Behaviors" xmlns:local1="clr-namespace:MusicRoom.UI.CustomViews"
-                      Title="HE'S BACK">
+             xmlns:xamForms="clr-namespace:ReactiveUI.XamForms;assembly=ReactiveUI.XamForms"
+             Title="HE'S BACK">
         <ContentPage.Content>
             <StackLayout>
                 <Label Text="Welcome to Xamarin.Forms!"
@@ -30,9 +33,8 @@
                 VerticalOptions="CenterAndExpand" 
                 HorizontalOptions="CenterAndExpand"
                 WidthRequest="200"
-		        x:Name="TrackQueryEntry" 
-		        mvx:Bi.nd="Text Message, Mode=TwoWay"/>
-            <Button Text="Message here..." mvx:Bi.nd="Clicked SendMessageCommand"/>
+		        x:Name="TrackQueryEntry" />
+            <Button Text="Message here..." />
         </StackLayout>
         </ContentPage.Content>
-</views:MvxContentPage>
+</xamForms:ReactiveContentPage>

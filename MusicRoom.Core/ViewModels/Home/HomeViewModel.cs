@@ -1,133 +1,116 @@
-using System;
 using System.Linq;
+using System.Reactive;
+using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using MusicRoom.Core.Models;
 using MusicRoom.Core.Services.Interfaces;
-using MvvmCross.Commands;
-using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
-using Xamarin.Essentials;
+using ReactiveUI;
+using Splat;
 
 namespace MusicRoom.Core.ViewModels.Home
 {
-    public class HomeViewModel : BaseViewModel
+    public class HomeViewModel : ViewModelBase
     {
         public string Uri { get; } = "YouTubePlayer.html";
 
         private string _videoQuery;
+
+        [DataMember]
         public string VideoQuery
         {
             get => _videoQuery;
-            set
-            {
-                _videoQuery = value;
-                RaisePropertyChanged(() => VideoQuery);
-            }
+            set => this.RaiseAndSetIfChanged(ref _videoQuery, value);
         }
 
         private MvxObservableCollection<YouTubeVideoListItem> _videoList;
+
+        [DataMember]
         public MvxObservableCollection<YouTubeVideoListItem> VideoList
         {
             get => _videoList;
-            set
-            {
-                _videoList = value;
-                RaisePropertyChanged(() => VideoList);
-            }
+            set => this.RaiseAndSetIfChanged(ref _videoList, value);
         }
 
         private PagedResult<YouTubeVideoListItem> _videoPage;
+
+        [DataMember]
         public PagedResult<YouTubeVideoListItem> VideoPage
         {
             get => _videoPage;
             set
             {
-                _videoPage = value;
-                Total += VideoPage.Results.Count();
-                RaisePropertyChanged(() => VideoPage);
+                Total += value.Results.Count();
+                this.RaiseAndSetIfChanged(ref _videoPage, value);
             }
         }
 
-        private string _videoCount = "Search Videos";
-        public string VideoCount
-        {
-            get => _videoCount;
-            set
-            {
-                _videoCount = value;
-                RaisePropertyChanged(() => VideoCount);
-            }
-        }
+        private ObservableAsPropertyHelper<string> _videoCount;
+        public string VideoCount => _videoCount?.Value ?? "Search Videos";
 
         private int _total;
+
+        [DataMember]
         public int Total
         {
             get => _total;
-            set
-            {
-                _total = value;
-                if (VideoPage != null)
-                { 
-					VideoCount = $"Displaying {Total} Videos";
-		        }
-                RaisePropertyChanged(() => Total);
-            }
+            set => this.RaiseAndSetIfChanged(ref _total, value);
         }
 
         private bool _isLoading;
+
+        [DataMember]
         public bool IsLoading
         {
             get => _isLoading;
-            set
-            {
-                _isLoading = value;
-                RaisePropertyChanged(() => IsLoading);
-            }
+            set => this.RaiseAndSetIfChanged(ref _isLoading, value);
         }
 
         private YouTubeVideoListItem _video;
+
+        [DataMember]
         public YouTubeVideoListItem Video
         {
             get => _video;
-            set
-            {
-                _video = value;
-                RaisePropertyChanged(() => Video);
-            }
+            set => this.RaiseAndSetIfChanged(ref _video, value);
         }
 
         private readonly IYoutubeSearchService _youtube;
 
-        private readonly IMvxNavigationService _navMan;
-
-        public HomeViewModel(IYoutubeSearchService youtube, IMvxNavigationService navMan)
+        public HomeViewModel(IScreen screen = null, IYoutubeSearchService youtube = null) : base(screen)
         {
-            _youtube = youtube;
+            UrlPathSegment = "Home";
 
-            _navMan = navMan;
+            _youtube = youtube ?? Locator.Current.GetService<IYoutubeSearchService>();
+
+            this
+                .WhenAnyValue(
+                    vm => vm.Total, _ => _,
+                    (t1, _) => $"Displaying {t1} Videos")
+                .ToProperty<HomeViewModel, string>(this, nameof(VideoCount));
+
+            SearchAsyncCommand = ReactiveCommand
+            .CreateFromTask(
+                async () => await SearchAsync());
+                //this.WhenAnyValue( vm => vm.VideoQuery));
+
+            GetNextPageAsyncCommand = ReactiveCommand.CreateFromTask(async () => await GetNextPageAsync());
+
+            PlayVideoCommand = ReactiveCommand.Create<YouTubeVideoListItem>(Play);
+
+            //GoToChatAsyncCommand = ReactiveCommand.CreateFromTask(async () => await _navMan.Navigate<ChatViewModel>());
         }
 
-        public override async Task Initialize()
-	    {
-            await base.Initialize();
-        }
-
-        private MvxInteraction<string> _interaction =
-            new MvxInteraction<string>();
-
+        private MvxInteraction<string> _interaction = new MvxInteraction<string>();
         public IMvxInteraction<string> Interaction => _interaction;
 
-        public IMvxCommand SearchAsyncCommand
-            => new MvxAsyncCommand(SearchAsync);
+        public readonly ReactiveCommand<Unit, Unit> SearchAsyncCommand;
 
-        public IMvxCommand<YouTubeVideoListItem> PlayVideoAsyncCommand
-            => new MvxAsyncCommand<YouTubeVideoListItem>(PlayAsync);
+        public ReactiveCommand<YouTubeVideoListItem, Unit> PlayVideoCommand;
 
-        public IMvxCommand GetNextPageCommand
-            => new MvxAsyncCommand(GetNextPageAsync);
+        public readonly ReactiveCommand<Unit, Unit> GetNextPageAsyncCommand;
 
-		public IMvxCommand GoToChatCommand 
-		    => new MvxAsyncCommand(async () => await _navMan.Navigate<ChatViewModel>());
+        public ReactiveCommand<Unit, Unit> GoToChatAsyncCommand;
 
         private async Task SearchAsync()
         {
@@ -141,16 +124,15 @@ namespace MusicRoom.Core.ViewModels.Home
             IsLoading = false;
 	    }
 
-        private async Task PlayAsync(YouTubeVideoListItem video)
+        private void Play(YouTubeVideoListItem video)
         {
-
 			_interaction.Raise(Video.Id);
 	    }
 
         private async Task GetNextPageAsync()
         {
             if (!IsLoading)
-            { 
+            {
 			    IsLoading = true;
 
 			    VideoPage = await _youtube.GetNextPageAsync(VideoPage.Next);

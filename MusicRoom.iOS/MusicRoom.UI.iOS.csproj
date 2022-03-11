@@ -75,7 +75,6 @@
     <Compile Include="Linker\LinkerPleaseInclude.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
-    <Compile Include="Setup.cs" />
     <Compile Include="Styles\ColorPalette.cs" />
     <None Include="Entitlements.plist" />
     <None Include="Info.plist">
@@ -110,6 +109,15 @@
     </PackageReference>
     <PackageReference Include="MvvmCross.Forms">
       <Version>8.0.2</Version>
+    </PackageReference>
+    <PackageReference Include="ReactiveUI">
+      <Version>17.1.50</Version>
+    </PackageReference>
+    <PackageReference Include="ReactiveUI.Events.XamForms">
+      <Version>15.1.1</Version>
+    </PackageReference>
+    <PackageReference Include="ReactiveUI.XamForms">
+      <Version>17.1.50</Version>
     </PackageReference>
     <PackageReference Include="Serilog.Extensions.Logging">
       <Version>3.1.0</Version>

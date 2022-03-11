@@ -1,19 +1,44 @@
-﻿using Foundation;
-using MvvmCross.Forms.Platforms.Ios.Core;
+﻿using System.Diagnostics;
+using Foundation;
+using MusicRoom.Core;
+using MusicRoom.UI;
+using ReactiveUI;
 using UIKit;
 
 namespace MusicRoom.iOS
 {
-    [Register(nameof(AppDelegate))]
-    public partial class AppDelegate : MvxFormsApplicationDelegate<Setup, Core.App, UI.App>
+    [Register("AppDelegate")]
+    public partial class AppDelegate : global::Xamarin.Forms.Platform.iOS.FormsApplicationDelegate
     {
-        public override UIWindow Window { get; set; }
+        AutoSuspendHelper suspendHelper;
 
-        public override bool FinishedLaunching(UIApplication application, NSDictionary launchOptions)
+        public AppDelegate()
         {
-            var result = base.FinishedLaunching(application, launchOptions);
+            RxApp.SuspensionHost.CreateNewAppState = () => new AppBootstrapper();
+        }
 
-            return result;
+        public override bool FinishedLaunching(UIApplication app, NSDictionary options)
+        {
+            global::Xamarin.Forms.Forms.Init();
+
+            LoadApplication(new App());
+
+            LogFonts();
+
+            return base.FinishedLaunching(app, options);
+        }
+        /// <summary>
+        /// Logs the installed fonts to the debug window.
+        /// </summary>
+        private void LogFonts()
+        {
+            foreach (NSString family in UIFont.FamilyNames)
+            {
+                foreach (NSString font in UIFont.FontNamesForFamilyName(family))
+                {
+                    Debug.WriteLine(@"{0}", font);
+                }
+            }
         }
     }
 }

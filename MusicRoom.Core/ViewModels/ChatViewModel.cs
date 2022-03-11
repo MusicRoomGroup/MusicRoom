@@ -7,7 +7,7 @@ using MvvmCross.ViewModels;
 
 namespace MusicRoom.Core.ViewModels
 {
-    public class ChatViewModel : BaseViewModel
+    public class ChatViewModel : ViewModelBase
     {
         private readonly IChatService _chatService;
 
@@ -24,21 +24,21 @@ namespace MusicRoom.Core.ViewModels
         };
 
         private string _message;
-        public string Message 
+        public string Message
 	    {
             get => _message;
             set
             {
                 _message = value;
                 ChatMessage.Message = value;
-                RaisePropertyChanged(() => Message);
+                //RaisePropertyChanged(() => Message);
             }
 	    }
 
-        public MvxObservableCollection<ChatMessage> Messages { get; set; } 
+        public MvxObservableCollection<ChatMessage> Messages { get; set; }
 	        = new MvxObservableCollection<ChatMessage>();
 
-        public override async Task Initialize() => await _chatService.StartAsync(ChatMessage.GroupId);	
+        //public override async Task Initialize() => await _chatService.StartAsync(ChatMessage.GroupId);
 
         private void _chatService_OnReceivedMessage(object sender, ChatMessage e) => Messages.Add(e);
 

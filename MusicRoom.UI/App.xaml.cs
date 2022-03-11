@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using MusicRoom.Core;
 using Xamarin.Forms;
 
 namespace MusicRoom.UI
@@ -11,6 +12,10 @@ namespace MusicRoom.UI
         public App()
         {
             InitializeComponent();
+
+            var bootstrapper = new AppBootstrapper();
+
+            MainPage = bootstrapper.CreateMainPage();
         }
     }
 }

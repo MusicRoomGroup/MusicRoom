@@ -1,57 +1,60 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<views:MvxContentPage 
-    x:TypeArguments="viewModels:HomeViewModel"
+<rxui:ReactiveContentPage
+    x:Class="MusicRoom.UI.Pages.HomePage"
+    x:TypeArguments="vm:HomeViewModel"
+    xmlns:vm="clr-namespace:MusicRoom.Core.ViewModels.Home;assembly=MusicRoom.Core" 
+    xmlns:rxui="clr-namespace:ReactiveUI.XamForms;assembly=ReactiveUI.XamForms"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:views="clr-namespace:MvvmCross.Forms.Views;assembly=MvvmCross.Forms"
-    xmlns:mvx="clr-namespace:MvvmCross.Forms.Bindings;assembly=MvvmCross.Forms"
     xmlns:local="clr-namespace:MusicRoom.UI.Pages"
-    x:Class="MusicRoom.UI.Pages.HomePage"
-    xmlns:viewModels="clr-namespace:MusicRoom.Core.ViewModels.Home;assembly=MusicRoom.Core" xmlns:behavior="clr-namespace:MusicRoom.UI.Behaviors" xmlns:local1="clr-namespace:MusicRoom.UI.CustomViews"
+    xmlns:behavior="clr-namespace:MusicRoom.UI.Behaviors" xmlns:local1="clr-namespace:MusicRoom.UI.CustomViews"
                       Title="Main page">
-    <ContentPage.Content>
+    <!-- <rxui:ReactiveContentPage.BindingContext> -->
+    <!--     <vm:HomeViewModel/> -->
+    <!-- </rxui:ReactiveContentPage.BindingContext> -->
+    <rxui:ReactiveContentPage.Content>
         <StackLayout>
 			<local1:HybridWebView 
-                mvx:Bi.nd="Uri Uri"
                 x:Name="YouTubePlayer"
                 VerticalOptions="FillAndExpand" 
                 HorizontalOptions="FillAndExpand"
 		        HeightRequest="493" 
 		        WidthRequest="375" />
-            <Label mvx:Bi.nd="Text VideoCount"
+            <Label 
+                x:Name="VideoCount"
                 VerticalOptions="CenterAndExpand" 
                 HorizontalOptions="CenterAndExpand" />
             <Entry 
+                x:Name="TrackQueryEntry" 
                 VerticalOptions="CenterAndExpand" 
                 HorizontalOptions="CenterAndExpand"
-                WidthRequest="200"
-		        x:Name="TrackQueryEntry" 
-		        mvx:Bi.nd="Text VideoQuery, Mode=TwoWay"/>
-            <Button Text="Chat" mvx:Bi.nd="Clicked GoToChatCommand"/>
-            <Button Text="Search" mvx:Bi.nd="Clicked SearchAsyncCommand"/>
-	        <Label VerticalOptions="CenterAndExpand" 
+                WidthRequest="200" />
+            <Button x:Name="ChatButton" Text="Chat" />
+            <Button x:Name="SearchButton" Text="Search" />
+	        <Label 
+                x:Name="LoadingLabel"
+                VerticalOptions="CenterAndExpand" 
 		        HorizontalOptions="CenterAndExpand"
-		        Text="Loading" mvx:Bi.nd="IsVisible IsLoading" />
+		        Text="Loading" />
             <ScrollView>
-			    <views:MvxListView 
+			    <ListView 
+                    x:Name="VideosList"
 					VerticalOptions="CenterAndExpand" 
-					HorizontalOptions="CenterAndExpand"
-                    ItemClick="{mvx:MvxBind PlayVideoAsyncCommand}"
-		            ItemsSource="{Binding VideoList}" 
-		            SelectedItem="{Binding Video}"> 
+					HorizontalOptions="CenterAndExpand">
 				    <ListView.ItemTemplate>
 					    <DataTemplate>
 							<ImageCell
-			                ImageSource="{Binding ImageUri}" 
-                            Text="{Binding Title}"
-                            Detail="{Binding Author}" />
+                                x:Name="ImageCell"
+                                ImageSource="{Binding Video.ImageUri}" 
+                                Text="{Binding Video.Title}"
+                                Detail="{Binding Video.Author}" />
                         </DataTemplate>
 					</ListView.ItemTemplate> 
 				    <ListView.Behaviors>  
-					    <behavior:InfiniteScroll LoadMoreCommand="{Binding GetNextPageCommand}" />  
+					    <behavior:InfiniteScroll x:Name="InfiniteScroll" />
 					</ListView.Behaviors>
-				</views:MvxListView>
+				</ListView>
 		    </ScrollView>
         </StackLayout>
-    </ContentPage.Content>
-</views:MvxContentPage>
+    </rxui:ReactiveContentPage.Content>
+</rxui:ReactiveContentPage>
