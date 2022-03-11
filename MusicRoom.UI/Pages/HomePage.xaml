@@ -1,24 +1,21 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<rxui:ReactiveContentPage
+<ui:ContentPageBase
     x:Class="MusicRoom.UI.Pages.HomePage"
     x:TypeArguments="vm:HomeViewModel"
+    xmlns:ui="clr-namespace:MusicRoom.UI"
     xmlns:vm="clr-namespace:MusicRoom.Core.ViewModels.Home;assembly=MusicRoom.Core" 
     xmlns:rxui="clr-namespace:ReactiveUI.XamForms;assembly=ReactiveUI.XamForms"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:MusicRoom.UI.Pages"
-    xmlns:behavior="clr-namespace:MusicRoom.UI.Behaviors" xmlns:local1="clr-namespace:MusicRoom.UI.CustomViews"
+    xmlns:local="clr-namespace:MusicRoom.UI.CustomViews;assembly=MusicRoom.UI"
+    xmlns:behavior="clr-namespace:MusicRoom.UI.Behaviors" 
                       Title="Main page">
-    <!-- <rxui:ReactiveContentPage.BindingContext> -->
-    <!--     <vm:HomeViewModel/> -->
-    <!-- </rxui:ReactiveContentPage.BindingContext> -->
-    <rxui:ReactiveContentPage.Content>
         <StackLayout>
-			<local1:HybridWebView 
+			<local:HybridWebView
                 x:Name="YouTubePlayer"
-                VerticalOptions="FillAndExpand" 
+                VerticalOptions="FillAndExpand"
                 HorizontalOptions="FillAndExpand"
-		        HeightRequest="493" 
+		        HeightRequest="493"
 		        WidthRequest="375" />
             <Label 
                 x:Name="VideoCount"
@@ -56,5 +53,4 @@
 				</ListView>
 		    </ScrollView>
         </StackLayout>
-    </rxui:ReactiveContentPage.Content>
-</rxui:ReactiveContentPage>
+</ui:ContentPageBase>

@@ -24,7 +24,7 @@ namespace MusicRoom.iOS
         {
         }
 
-        public HybridWebViewRenderer(WKWebViewConfiguration config) : base(config)
+        private HybridWebViewRenderer(WKWebViewConfiguration config) : base(config)
         {
             _userController = config.UserContentController;
             var script = new WKUserScript(new NSString(JavaScriptFunction), WKUserScriptInjectionTime.AtDocumentEnd, false);
@@ -41,14 +41,13 @@ namespace MusicRoom.iOS
                 _userController.RemoveAllUserScripts();
                 _userController.RemoveScriptMessageHandler("invokeAction");
                 var hybridWebView = e.OldElement as HybridWebView;
-                hybridWebView.Cleanup();
+                hybridWebView?.Cleanup();
             }
 
-            if (e.NewElement != null)
-            {
-                var filename = Path.Combine(NSBundle.MainBundle.BundlePath, ((HybridWebView)Element).Uri);
-                LoadRequest(new NSUrlRequest(new NSUrl(filename, false)));
-            }
+            if (e.NewElement == null) return;
+            var filename = Path.Combine(NSBundle.MainBundle.BundlePath, "YouTubePlayer.html");
+            //var filename = Path.Combine(NSBundle.MainBundle.BundlePath, ((HybridWebView)Element).Uri);
+            LoadRequest(new NSUrlRequest(new NSUrl(filename, false)));
         }
 
         public void DidReceiveScriptMessage(WKUserContentController userContentController, WKScriptMessage message)
@@ -63,6 +62,6 @@ namespace MusicRoom.iOS
                 ((HybridWebView)Element).Cleanup();
             }
             base.Dispose(disposing);
-        }        
+        }
     }
 }

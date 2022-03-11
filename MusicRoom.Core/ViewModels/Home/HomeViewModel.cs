@@ -1,7 +1,10 @@
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
+using DynamicData;
 using MusicRoom.Core.Models;
 using MusicRoom.Core.Services.Interfaces;
 using MvvmCross.ViewModels;
@@ -23,10 +26,10 @@ namespace MusicRoom.Core.ViewModels.Home
             set => this.RaiseAndSetIfChanged(ref _videoQuery, value);
         }
 
-        private MvxObservableCollection<YouTubeVideoListItem> _videoList;
+        private ObservableCollection<YouTubeVideoListItem> _videoList;
 
         [DataMember]
-        public MvxObservableCollection<YouTubeVideoListItem> VideoList
+        public ObservableCollection<YouTubeVideoListItem> VideoList
         {
             get => _videoList;
             set => this.RaiseAndSetIfChanged(ref _videoList, value);
@@ -104,13 +107,13 @@ namespace MusicRoom.Core.ViewModels.Home
         private MvxInteraction<string> _interaction = new MvxInteraction<string>();
         public IMvxInteraction<string> Interaction => _interaction;
 
-        public readonly ReactiveCommand<Unit, Unit> SearchAsyncCommand;
+        public ReactiveCommand<Unit, Unit> SearchAsyncCommand { get; }
 
-        public ReactiveCommand<YouTubeVideoListItem, Unit> PlayVideoCommand;
+        public ReactiveCommand<YouTubeVideoListItem, Unit> PlayVideoCommand { get; }
 
-        public readonly ReactiveCommand<Unit, Unit> GetNextPageAsyncCommand;
+        public ReactiveCommand<Unit, Unit> GetNextPageAsyncCommand { get; }
 
-        public ReactiveCommand<Unit, Unit> GoToChatAsyncCommand;
+        public ReactiveCommand<Unit, Unit> GoToChatAsyncCommand { get; }
 
         private async Task SearchAsync()
         {
@@ -119,7 +122,7 @@ namespace MusicRoom.Core.ViewModels.Home
 
             VideoPage = await _youtube.SearchVideosAsync(VideoQuery);
 
-            VideoList = new MvxObservableCollection<YouTubeVideoListItem>(VideoPage.Results);
+            VideoList = new ObservableCollection<YouTubeVideoListItem>(VideoPage.Results);
 
             IsLoading = false;
 	    }
