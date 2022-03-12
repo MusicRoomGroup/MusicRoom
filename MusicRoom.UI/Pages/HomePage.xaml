@@ -7,8 +7,9 @@
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:MusicRoom.UI.CustomViews;assembly=MusicRoom.UI"
-    xmlns:behavior="clr-namespace:MusicRoom.UI.Behaviors" 
-                      Title="Main page">
+    xmlns:behavior="clr-namespace:MusicRoom.UI.Behaviors"
+    xmlns:models="clr-namespace:MusicRoom.Core.Models;assembly=MusicRoom.Core"
+    Title="Main page">
         <StackLayout>
 			<local:HybridWebView
                 x:Name="YouTubePlayer"
@@ -38,12 +39,11 @@
 					VerticalOptions="CenterAndExpand" 
 					HorizontalOptions="CenterAndExpand">
 				    <ListView.ItemTemplate>
-					    <DataTemplate>
-							<ImageCell
-                                x:Name="ImageCell"
-                                ImageSource="{Binding Video.ImageUri}" 
-                                Text="{Binding Video.Title}"
-                                Detail="{Binding Video.Author}" />
+					    <DataTemplate x:DataType="models:YouTubeVideoListItem">
+							<ImageCell 
+                                ImageSource="{Binding ImageUri}"
+                                Text="{Binding Title}"
+                                Detail="{Binding Author}" />
                         </DataTemplate>
 					</ListView.ItemTemplate> 
 				    <ListView.Behaviors>  
