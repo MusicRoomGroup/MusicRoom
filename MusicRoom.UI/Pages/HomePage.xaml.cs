@@ -39,9 +39,6 @@ namespace MusicRoom.UI.Pages
                 this
                     .Bind(ViewModel, x => x.Video, x => x.VideosList.SelectedItem)
                     .DisposeWith(disposable);
-                this
-                    .Bind(ViewModel, x => x.Video, x => x.VideosList.SelectedItem)
-                    .DisposeWith(disposable);
                  this
                      .BindCommand(ViewModel, x => x.GetNextPageAsyncCommand, x => x.InfiniteScroll.LoadMoreCommand)
                      .DisposeWith(disposable);

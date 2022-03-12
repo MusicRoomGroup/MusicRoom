@@ -104,12 +104,6 @@
     <Reference Include="Xamarin.iOS" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="MvvmCross">
-      <Version>8.0.2</Version>
-    </PackageReference>
-    <PackageReference Include="MvvmCross.Forms">
-      <Version>8.0.2</Version>
-    </PackageReference>
     <PackageReference Include="ReactiveUI">
       <Version>17.1.50</Version>
     </PackageReference>

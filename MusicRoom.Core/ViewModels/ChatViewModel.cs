@@ -1,9 +1,12 @@
 using System;
+using System.Collections.ObjectModel;
+using System.Reactive;
+using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using MusicRoom.SignalRClient.Interfaces;
 using MusicRoom.SignalRClient.Models;
-using MvvmCross.Commands;
-using MvvmCross.ViewModels;
+using ReactiveUI;
+using Splat;
 
 namespace MusicRoom.Core.ViewModels
 {
@@ -11,10 +14,17 @@ namespace MusicRoom.Core.ViewModels
     {
         private readonly IChatService _chatService;
 
-        public ChatViewModel(IChatService chatService)
+        public ChatViewModel(IChatService chatService = null)
         {
-            _chatService = chatService;
-            _chatService.OnReceivedMessage += _chatService_OnReceivedMessage;
+            _chatService = chatService ?? Locator.Current.GetService<IChatService>();
+
+            if (_chatService != null)
+                _chatService.OnReceivedMessage += _chatService_OnReceivedMessage;
+
+            this.WhenAnyValue(vm => vm.Message)
+                .ToProperty(this, nameof(ChatMessage.Message));
+
+            SendMessageCommand = ReactiveCommand.CreateFromTask(async () => await SendMessageAsync());
         }
 
         private ChatMessage ChatMessage { get; set; } = new ChatMessage
@@ -23,28 +33,26 @@ namespace MusicRoom.Core.ViewModels
             User = "Joe"
         };
 
+        [DataMember]
         private string _message;
         public string Message
 	    {
             get => _message;
-            set
-            {
-                _message = value;
-                ChatMessage.Message = value;
-                //RaisePropertyChanged(() => Message);
-            }
+            set => this.RaiseAndSetIfChanged(ref _message, value);
 	    }
 
-        public MvxObservableCollection<ChatMessage> Messages { get; set; }
-	        = new MvxObservableCollection<ChatMessage>();
+        public ObservableCollection<ChatMessage> Messages { get; set; }
+	        = new ObservableCollection<ChatMessage>();
 
+        // TODO: replace mvx interaction
         //public override async Task Initialize() => await _chatService.StartAsync(ChatMessage.GroupId);
 
-        private void _chatService_OnReceivedMessage(object sender, ChatMessage e) => Messages.Add(e);
+        private void _chatService_OnReceivedMessage(object sender, ChatMessage e)
+            => Messages.Add(e);
 
         public bool IsConnected => _chatService.IsConnected();
 
-        public IMvxCommand SendMessageCommand => new MvxAsyncCommand(SendMessageAsync);
+        public ReactiveCommand<Unit, Unit> SendMessageCommand { get; }
 
         private async Task SendMessageAsync()
         {

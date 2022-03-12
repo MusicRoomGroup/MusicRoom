@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
@@ -7,7 +6,6 @@ using System.Threading.Tasks;
 using DynamicData;
 using MusicRoom.Core.Models;
 using MusicRoom.Core.Services.Interfaces;
-using MvvmCross.ViewModels;
 using ReactiveUI;
 using Splat;
 
@@ -104,8 +102,9 @@ namespace MusicRoom.Core.ViewModels.Home
             //GoToChatAsyncCommand = ReactiveCommand.CreateFromTask(async () => await _navMan.Navigate<ChatViewModel>());
         }
 
-        private MvxInteraction<string> _interaction = new MvxInteraction<string>();
-        public IMvxInteraction<string> Interaction => _interaction;
+        // TODO: replace mvx interaction
+        // private MvxInteraction<string> _interaction = new MvxInteraction<string>();
+        // public IMvxInteraction<string> Interaction => _interaction;
 
         public ReactiveCommand<Unit, Unit> SearchAsyncCommand { get; }
 
@@ -129,7 +128,8 @@ namespace MusicRoom.Core.ViewModels.Home
 
         private void Play(YouTubeVideoListItem video)
         {
-			_interaction.Raise(Video.Id);
+            // TODO: replace mvx interaction
+			// _interaction.Raise(Video.Id);
 	    }
 
         private async Task GetNextPageAsync()

@@ -6,10 +6,6 @@
              xmlns:vm="clr-namespace:MusicRoom.Core.ViewModels;assembly=MusicRoom.Core" 
              xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:rxui="clr-namespace:ReactiveUI.XamForms;assembly=ReactiveUI.XamForms"
-             xmlns:views="clr-namespace:MvvmCross.Forms.Views;assembly=MvvmCross.Forms"
-             xmlns:mvx="clr-namespace:MvvmCross.Forms.Bindings;assembly=MvvmCross.Forms"
-             xmlns:viewModels="clr-namespace:MusicRoom.Core.ViewModels;assembly=MusicRoom.Core" xmlns:behavior="clr-namespace:MusicRoom.UI.Behaviors" xmlns:local1="clr-namespace:MusicRoom.UI.CustomViews"
              xmlns:xamForms="clr-namespace:ReactiveUI.XamForms;assembly=ReactiveUI.XamForms"
              Title="HE'S BACK">
         <ContentPage.Content>
@@ -17,7 +13,7 @@
                 <Label Text="Welcome to Xamarin.Forms!"
                 VerticalOptions="CenterAndExpand" 
                 HorizontalOptions="CenterAndExpand" />
-            <views:MvxListView 
+            <ListView 
 					VerticalOptions="CenterAndExpand" 
 					HorizontalOptions="CenterAndExpand"
 		            ItemsSource="{Binding Messages}" >
@@ -28,7 +24,7 @@
                             Detail="{Binding User}" />
                         </DataTemplate>
 					</ListView.ItemTemplate> 
-            </views:MvxListView>
+            </ListView>
             <Entry 
                 VerticalOptions="CenterAndExpand" 
                 HorizontalOptions="CenterAndExpand"
