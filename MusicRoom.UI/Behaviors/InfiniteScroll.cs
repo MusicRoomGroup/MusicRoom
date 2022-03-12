@@ -7,17 +7,17 @@ namespace MusicRoom.UI.Behaviors
 {
     public class InfiniteScroll : Behavior<ListView>
     {
-        public static readonly BindableProperty LoadMoreCommandProperty =
+        private static readonly BindableProperty CommandProperty =
             BindableProperty.Create(
-                nameof(LoadMoreCommand),
+                nameof(Command),
                 typeof(ICommand),
                 typeof(InfiniteScroll),
                 null);
 
-        public ICommand LoadMoreCommand
+        public ICommand Command
         {
-            get => (ICommand)GetValue(LoadMoreCommandProperty);
-            set => SetValue(LoadMoreCommandProperty, value);
+            get => (ICommand)GetValue(CommandProperty);
+            set => SetValue(CommandProperty, value);
         }
 
         public ListView AssociatedObject { get; private set; }
@@ -54,11 +54,10 @@ namespace MusicRoom.UI.Behaviors
 
         private void InfiniteListView_ItemAppearing(object sender, ItemVisibilityEventArgs e)
         {
-            if (AssociatedObject.ItemsSource is IList items && e.Item == items[items.Count - 1])
-            {
-                if (LoadMoreCommand != null && LoadMoreCommand.CanExecute(null))
-                    LoadMoreCommand.Execute(null);
-            }
+            if (!(AssociatedObject.ItemsSource is IList items) || e.Item != items[^1]) return;
+
+            if (Command != null && Command.CanExecute(null))
+                Command.Execute(null);
         }
     }
 }

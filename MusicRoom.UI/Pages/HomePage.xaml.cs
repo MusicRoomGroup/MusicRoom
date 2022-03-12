@@ -1,5 +1,6 @@
 using System.Reactive.Disposables;
-using MusicRoom.Core.ViewModels.Home;
+using System.Reactive.Linq;
+using MusicRoom.Core.Models;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using ReactiveUI;
@@ -7,7 +8,7 @@ using ReactiveUI;
 namespace MusicRoom.UI.Pages
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class HomePage : ContentPageBase<HomeViewModel>
+    public partial class HomePage
     {
         public HomePage()
         {
@@ -55,9 +56,10 @@ namespace MusicRoom.UI.Pages
                         v => v.VideosList.SelectedItem)
                     .DisposeWith(disposable);
 
-                this.BindCommand(ViewModel,
+
+                this.OneWayBind(ViewModel,
                         vm => vm.GetNextPageAsyncCommand,
-                        v => v.InfiniteScroll.LoadMoreCommand)
+                        v => v.InfiniteScroll.Command)
                     .DisposeWith(disposable);
             });
         }
