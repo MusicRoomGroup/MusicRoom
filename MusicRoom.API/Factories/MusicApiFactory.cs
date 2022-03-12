@@ -11,42 +11,43 @@ using Xamarin.Essentials;
 
 namespace MusicRoom.API.Factories
 {
-    public class MusicAPIFactory : IAPIFactory
+    public class MusicApiFactory : IApiFactory
     {
         private static EmbedIOAuthServer _server;
 
         private SpotifyClient _spotify;
 
-        private readonly SupportedAPI _api;
+        private readonly SupportedApi _api;
 
         private readonly AutoResetEvent _event = new AutoResetEvent(false);
 
-        public MusicAPIFactory() 
+        public MusicApiFactory()
         {
-            _api = SupportedAPI.Spotify;
+            _api = SupportedApi.Spotify;
         }
 
-        public MusicAPIFactory(SupportedAPI api) 
+        public MusicApiFactory(SupportedApi api)
         {
             _api = api;
         }
 
-        public async Task<IPlayerAPI> BuildPlayerAPIAsync() => _api switch
+        public async Task<IPlayerApi> BuildPlayerAPIAsync() => _api switch
         {
-            SupportedAPI.Spotify => await BuildSpotifyPlayerAPIAsync(),
-            _ => throw new NotImplementedException(),
+            SupportedApi.Spotify => await BuildSpotifyPlayerApiAsync(),
+            SupportedApi.SoundCloud => throw new NotSupportedException("SoundCloud is not yet supported"),
+            _ => throw new NotSupportedException("This API is not supported"),
         };
 
-        private async Task<IPlayerAPI> BuildSpotifyPlayerAPIAsync()
+        private async Task<IPlayerApi> BuildSpotifyPlayerApiAsync()
         {
             await AuthorizeSpotifyAsync();
 
-    	    return await Task.FromResult(new SpotifyPlayerAPI(_spotify));
+    	    return await Task.FromResult(new SpotifyPlayerApi(_spotify));
         }
 
         private async Task AuthorizeSpotifyAsync()
 	    {
-			_server = new EmbedIOAuthServer(new Uri("http://localhost:5000/callback"), 5000); 
+			_server = new EmbedIOAuthServer(new Uri("http://localhost:5000/callback"), 5000);
 
             await _server.Start();
 
@@ -56,9 +57,9 @@ namespace MusicRoom.API.Factories
 
             var request = new LoginRequest(_server.BaseUri, "e6320f6b0830403ebe516c21b852a02a", LoginRequest.ResponseType.Token)
             {
-                Scope = new List<string> 
-		        { 
-		            Scopes.AppRemoteControl, 
+                Scope = new List<string>
+		        {
+		            Scopes.AppRemoteControl,
 		            Scopes.UserReadPrivate,
                     Scopes.UserReadPlaybackState,
                     Scopes.UserModifyPlaybackState
@@ -66,7 +67,7 @@ namespace MusicRoom.API.Factories
             };
 
             try
-            { 
+            {
 			    await Browser.OpenAsync(request.ToUri(), BrowserLaunchMode.External);
                 //await Browser.OpenAsync(request.ToUri());
             }

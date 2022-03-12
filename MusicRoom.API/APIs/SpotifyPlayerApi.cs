@@ -8,11 +8,11 @@ using SpotifyAPI.Web;
 
 namespace MusicRoom.API.APIs
 {
-    public class SpotifyPlayerAPI : IPlayerAPI
+    public class SpotifyPlayerApi : IPlayerApi
     {
         private static SpotifyClient _spotify;
 
-        public SpotifyPlayerAPI(SpotifyClient spotify)
+        public SpotifyPlayerApi(SpotifyClient spotify)
         {
             _spotify = spotify;
         }
@@ -23,7 +23,7 @@ namespace MusicRoom.API.APIs
         public async Task<Album> GetAlbumAsync(string albumId)
             => BuildAlbum(await _spotify.Albums.Get(albumId));
 
-        public async Task<Artist> GetArtistAsync(string artistId) 
+        public async Task<Artist> GetArtistAsync(string artistId)
             => BuildArtist(await _spotify.Artists.Get(artistId));
 
         public async Task<Query> SearchAsync(string query)
@@ -86,9 +86,9 @@ namespace MusicRoom.API.APIs
         }
 
         public async Task PlaySongs(IEnumerable<string> uris)
-        { 
-            var request = new PlayerResumePlaybackRequest() 
-	        { 
+        {
+            var request = new PlayerResumePlaybackRequest()
+	        {
 		        Uris = uris.ToList(),
 	        };
             await _spotify.Player.ResumePlayback(request);
@@ -101,9 +101,9 @@ namespace MusicRoom.API.APIs
 	    }
 
         public async Task PlaySong(string deviceId, string uri)
-        { 
-            var request = new PlayerResumePlaybackRequest() 
-	        { 
+        {
+            var request = new PlayerResumePlaybackRequest()
+	        {
                 DeviceId = deviceId,
 		        Uris = new List<string>() { uri },
 	        };
@@ -111,7 +111,7 @@ namespace MusicRoom.API.APIs
 	    }
 
         public async Task SelectDeviceAsync(string deviceId)
-        { 
+        {
             await _spotify.Player.TransferPlayback(new PlayerTransferPlaybackRequest(new List<string>() { deviceId }));
 	    }
 

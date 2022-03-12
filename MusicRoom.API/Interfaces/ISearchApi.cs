@@ -5,7 +5,7 @@ using MusicRoom.API.Models;
 
 namespace MusicRoom.API.Interfaces
 {
-    public interface ISearchAPI
+    public interface ISearchApi
     {
         Task<Track> GetTrackAsync(string trackId);
 
