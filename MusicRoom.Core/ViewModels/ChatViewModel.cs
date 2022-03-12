@@ -18,8 +18,7 @@ namespace MusicRoom.Core.ViewModels
         {
             _chatService = chatService ?? Locator.Current.GetService<IChatService>();
 
-            if (_chatService != null)
-                _chatService.OnReceivedMessage += _chatService_OnReceivedMessage;
+            if (_chatService != null) _chatService.OnReceivedMessage += _chatService_OnReceivedMessage;
 
             this.WhenAnyValue(vm => vm.Message)
                 .ToProperty(this, nameof(ChatMessage.Message));

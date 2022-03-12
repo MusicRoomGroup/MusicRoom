@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<xamForms:ReactiveContentPage
+             x:Class="MusicRoom.UI.Pages.ChatPage"
+             x:TypeArguments="vm:ChatViewModel"
+             xmlns:vm="clr-namespace:MusicRoom.Core.ViewModels;assembly=MusicRoom.Core" 
+             xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:xamForms="clr-namespace:ReactiveUI.XamForms;assembly=ReactiveUI.XamForms"
+             Title="HE'S BACK">
+        <ContentPage.Content>
+            <StackLayout>
+                <Label Text="Welcome to Xamarin.Forms!"
+                VerticalOptions="CenterAndExpand" 
+                HorizontalOptions="CenterAndExpand" />
+            <ListView 
+					VerticalOptions="CenterAndExpand" 
+					HorizontalOptions="CenterAndExpand"
+		            ItemsSource="{Binding Messages}" >
+				    <ListView.ItemTemplate>
+					    <DataTemplate>
+							<TextCell
+                            Text="{Binding Message}"
+                            Detail="{Binding User}" />
+                        </DataTemplate>
+					</ListView.ItemTemplate> 
+            </ListView>
+            <Entry 
+                VerticalOptions="CenterAndExpand" 
+                HorizontalOptions="CenterAndExpand"
+                WidthRequest="200"
+		        x:Name="TrackQueryEntry" />
+            <Button Text="Message here..." />
+        </StackLayout>
+        </ContentPage.Content>
+</xamForms:ReactiveContentPage>

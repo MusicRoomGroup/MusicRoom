@@ -27,7 +27,7 @@ namespace MusicRoom.UI
             Locator.CurrentMutable.RegisterLazySingleton(() => new YouTubeSearchService(), typeof(IYoutubeSearchService));
 
             Locator.CurrentMutable.Register(() => new HomePage(), typeof(IViewFor<HomeViewModel>));
-            Locator.CurrentMutable.Register(() => new ChatView(), typeof(IViewFor<ChatViewModel>));
+            Locator.CurrentMutable.Register(() => new ChatPage(), typeof(IViewFor<ChatViewModel>));
 
              this
                  .Router
