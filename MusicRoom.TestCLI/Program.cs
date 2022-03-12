@@ -13,9 +13,9 @@ namespace MusicRoom.API.Tests.CLI
     {
         public static async Task Main(string[] args)
         {
-            IAPIFactory factory = new MusicAPIFactory(SupportedAPI.Spotify);
+            IApiFactory factory = new MusicApiFactory(SupportedApi.Spotify);
 
-            IPlayerAPI player = await factory.BuildPlayerAPIAsync();
+            IPlayerApi player = await factory.BuildPlayerAPIAsync();
 
             IEnumerable<Device> devices = await player.GetDevicesAsync();
 

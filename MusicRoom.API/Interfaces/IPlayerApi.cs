@@ -4,7 +4,7 @@ using MusicRoom.API.Models;
 
 namespace MusicRoom.API.Interfaces
 {
-    public interface IPlayerAPI : IDeviceAPI, ISearchAPI
+    public interface IPlayerApi : IDeviceApi, ISearchApi
     {
     }
 }

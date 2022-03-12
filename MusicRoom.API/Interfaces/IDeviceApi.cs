@@ -5,7 +5,7 @@ using MusicRoom.API.Models;
 
 namespace MusicRoom.API.Interfaces
 {
-    public interface IDeviceAPI
+    public interface IDeviceApi
     {
         Task<IEnumerable<Device>> GetDevicesAsync();
 

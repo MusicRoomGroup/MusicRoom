@@ -2,8 +2,8 @@
 
 namespace MusicRoom.API.Interfaces
 {
-    public interface IAPIFactory
+    public interface IApiFactory
     {
-        Task<IPlayerAPI> BuildPlayerAPIAsync();
+        Task<IPlayerApi> BuildPlayerAPIAsync();
     }
 }

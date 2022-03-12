@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace MusicRoom.API.Interfaces
 {
-    public interface IAuthAPI
+    public interface IAuthApi
     {
         public Task<bool> Authorize();
     }
