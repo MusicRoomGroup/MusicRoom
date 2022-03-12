@@ -15,33 +15,50 @@ namespace MusicRoom.UI.Pages
 
             this.WhenActivated(disposable =>
             {
-                 this
-                     .Bind(ViewModel, x => x.Uri, x => x.YouTubePlayer.Uri)
-                     .DisposeWith(disposable);
-                this
-                    .Bind(ViewModel, x => x.VideoCount, x => x.VideoCount.Text)
+                this.Bind(ViewModel,
+                        vm => vm.Uri,
+                        v => v.YouTubePlayer.Uri)
                     .DisposeWith(disposable);
-                this
-                    .Bind(ViewModel, x => x.VideoQuery, x => x.TrackQueryEntry.Text)
+
+                this.Bind(ViewModel,
+                        vm => vm.VideoCount,
+                        v => v.VideoCount.Text)
                     .DisposeWith(disposable);
-                this
-                    .BindCommand(ViewModel, x => x.GoToChatAsyncCommand, x => x.ChatButton)
+
+                this.Bind(ViewModel,
+                        vm => vm.VideoQuery,
+                        v => v.TrackQueryEntry.Text)
                     .DisposeWith(disposable);
-                this
-                    .BindCommand(ViewModel, x => x.SearchAsyncCommand, x => x.SearchButton)
+
+                this.BindCommand(ViewModel,
+                        vm => vm.GoToChatAsyncCommand,
+                        v => v.ChatButton)
                     .DisposeWith(disposable);
-                this
-                    .Bind(ViewModel, x => x.IsLoading, x => x.LoadingLabel.IsVisible)
+
+                this.BindCommand(ViewModel,
+                        vm => vm.SearchAsyncCommand,
+                        v => v.SearchButton)
                     .DisposeWith(disposable);
-                this
-                    .OneWayBind(ViewModel, x => x.VideoList, x => x.VideosList.ItemsSource)
+
+                this.Bind(ViewModel,
+                        vm => vm.IsLoading,
+                        v => v.LoadingLabel.IsVisible)
                     .DisposeWith(disposable);
-                this
-                    .Bind(ViewModel, x => x.Video, x => x.VideosList.SelectedItem)
+
+                this.OneWayBind(ViewModel,
+                        vm => vm.VideoList,
+                        v => v.VideosList.ItemsSource)
                     .DisposeWith(disposable);
-                 this
-                     .BindCommand(ViewModel, x => x.GetNextPageAsyncCommand, x => x.InfiniteScroll.LoadMoreCommand)
-                     .DisposeWith(disposable);
+
+                this.Bind(ViewModel,
+                        vm => vm.Video,
+                        v => v.VideosList.SelectedItem)
+                    .DisposeWith(disposable);
+
+                this.BindCommand(ViewModel,
+                        vm => vm.GetNextPageAsyncCommand,
+                        v => v.InfiniteScroll.LoadMoreCommand)
+                    .DisposeWith(disposable);
             });
         }
 
