@@ -4,7 +4,6 @@
     x:TypeArguments="vm:HomeViewModel"
     xmlns:ui="clr-namespace:MusicRoom.UI"
     xmlns:vm="clr-namespace:MusicRoom.Core.ViewModels.Home;assembly=MusicRoom.Core" 
-    xmlns:rxui="clr-namespace:ReactiveUI.XamForms;assembly=ReactiveUI.XamForms"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:MusicRoom.UI.CustomViews;assembly=MusicRoom.UI"

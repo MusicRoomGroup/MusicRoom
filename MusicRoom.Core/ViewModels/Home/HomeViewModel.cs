@@ -13,7 +13,7 @@ namespace MusicRoom.Core.ViewModels.Home
 {
     public class HomeViewModel : ViewModelBase
     {
-        public string Uri { get; } = "YouTubePlayer.html";
+        public string Uri => "YouTubePlayer.html";
 
         private string _videoQuery;
 
@@ -91,9 +91,9 @@ namespace MusicRoom.Core.ViewModels.Home
                 .ToProperty<HomeViewModel, string>(this, nameof(VideoCount));
 
             SearchAsyncCommand = ReactiveCommand
-            .CreateFromTask(
-                async () => await SearchAsync());
-                //this.WhenAnyValue( vm => vm.VideoQuery));
+                .CreateFromTask( async () => await SearchAsync(),
+                    this.WhenAnyValue( vm => vm.VideoQuery,
+                        q => !string.IsNullOrEmpty(q)));
 
             GetNextPageAsyncCommand = ReactiveCommand.CreateFromTask(async () => await GetNextPageAsync());
 
