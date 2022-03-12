@@ -1,6 +1,8 @@
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
+using System.Reactive.Linq;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using DynamicData;
@@ -84,25 +86,31 @@ namespace MusicRoom.Core.ViewModels.Home
 
             _youtube = youtube ?? Locator.Current.GetService<IYoutubeSearchService>();
 
+            SearchAsyncCommand = ReactiveCommand
+                .CreateFromTask( SearchAsync, this.WhenAnyValue(
+                    vm => vm.VideoQuery,
+                        q => !string.IsNullOrEmpty(q)));
+
+            GetNextPageAsyncCommand = ReactiveCommand.CreateFromTask(GetNextPageAsync);
+
+            PlayVideoCommand = ReactiveCommand.Create<YouTubeVideoListItem>(Play);
+
+            // TODO: Replace mvx navigation with reactive ui
+            //GoToChatAsyncCommand = ReactiveCommand.CreateFromTask(async () => await _navMan.Navigate<ChatViewModel>());
+
             this
                 .WhenAnyValue(
                     vm => vm.Total, _ => _,
                     (t1, _) => $"Displaying {t1} Videos")
-                .ToProperty<HomeViewModel, string>(this, nameof(VideoCount));
+                .ToProperty(this, nameof(VideoCount));
 
-            SearchAsyncCommand = ReactiveCommand
-                .CreateFromTask( async () => await SearchAsync(),
-                    this.WhenAnyValue( vm => vm.VideoQuery,
-                        q => !string.IsNullOrEmpty(q)));
-
-            GetNextPageAsyncCommand = ReactiveCommand.CreateFromTask(async () => await GetNextPageAsync());
-
-            PlayVideoCommand = ReactiveCommand.Create<YouTubeVideoListItem>(Play);
-
-            //GoToChatAsyncCommand = ReactiveCommand.CreateFromTask(async () => await _navMan.Navigate<ChatViewModel>());
+            this
+                .WhenAnyValue(v => v.Video)
+                .Where( v => v != null)
+                .InvokeCommand(PlayVideoCommand);
         }
 
-        // TODO: replace mvx interaction
+        // TODO: replace mvx interaction with reactiveui
         // private MvxInteraction<string> _interaction = new MvxInteraction<string>();
         // public IMvxInteraction<string> Interaction => _interaction;
 
@@ -130,6 +138,7 @@ namespace MusicRoom.Core.ViewModels.Home
         {
             // TODO: replace mvx interaction
 			// _interaction.Raise(Video.Id);
+            Console.WriteLine($"Invoke Command Works! {video.Title} {video.Author}");
 	    }
 
         private async Task GetNextPageAsync()
