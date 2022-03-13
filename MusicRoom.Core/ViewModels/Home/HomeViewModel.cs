@@ -15,8 +15,6 @@ namespace MusicRoom.Core.ViewModels.Home
 {
     public class HomeViewModel : ViewModelBase
     {
-        public string Uri => "YouTubePlayer.html";
-
         [Reactive] public string VideoQuery { get; set; }
 
         [Reactive] private PagedResult<YouTubeVideoListItem> CurrentPage { get; set; }
