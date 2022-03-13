@@ -15,82 +15,78 @@ namespace MusicRoom.Core.Services.Implementations
 
         private static Queue<PagedResult<YouTubeVideoListItem>> _queueCache;
 
-		private readonly int _limit = 20;
+        private const int Limit = 20;
 
         private readonly YoutubeClient _youtube;
 
-		private bool _isQueuing = false;
+        private bool _isQueuing;
 
         public YouTubeSearchService()
         {
             _youtube = new YoutubeClient();
-
-			_queueCache = new Queue<PagedResult<YouTubeVideoListItem>>();
         }
 
         public async Task<PagedResult<YouTubeVideoListItem>> GetNextPageAsync(string token)
         {
-            if (_queueCache.TryDequeue(out PagedResult<YouTubeVideoListItem> result)) { 
-				return result;
-			} else if (_isQueuing) {
+            if (_queueCache.TryDequeue(out PagedResult<YouTubeVideoListItem> result)) return result;
+
+            if (_isQueuing)
+            {
                 await Task.Delay(10);
                 return await GetNextPageAsync(token);
-            } else {
-                await _enumerator.MoveNextAsync();
-                return BuildPagedResult(_enumerator.Current.Items);
             }
+
+            await _enumerator.MoveNextAsync();
+            return BuildPagedResult(_enumerator.Current.Items);
         }
 
-        public async Task<PagedResult<YouTubeVideoListItem>> SearchVideosAsync(string query) 
+        public async Task<PagedResult<YouTubeVideoListItem>> SearchVideosAsync(string query)
         {
-             _enumerator = _youtube.Search.GetResultBatchesAsync(query).GetAsyncEnumerator();
+            _queueCache = new Queue<PagedResult<YouTubeVideoListItem>>();
 
-			await _enumerator.MoveNextAsync();
+            _enumerator = _youtube.Search.GetResultBatchesAsync(query).GetAsyncEnumerator();
 
-		    Batch<ISearchResult> firstPage = _enumerator.Current;
+            await _enumerator.MoveNextAsync();
 
-		    _ = Task.Run(() => CacheResultsAsync());
+            Batch<ISearchResult> firstPage = _enumerator.Current;
 
-			return BuildPagedResult(firstPage.Items);
-	    }
+            _ = Task.Run(CacheResultsAsync);
 
-		private async Task CacheResultsAsync()
-		{
-			_isQueuing = true;
-			var pageCount = 0;
-			while ( await _enumerator.MoveNextAsync())
-			{
-				_queueCache.Enqueue(BuildPagedResult(_enumerator.Current.Items));
-				pageCount++; 
-				if (pageCount > _limit)
-				{
-					break;
-				}
-			}
-			_isQueuing = false;
-			;
-		}
+            return BuildPagedResult(firstPage.Items);
+        }
 
-		private PagedResult<YouTubeVideoListItem> BuildPagedResult(IReadOnlyList<ISearchResult> results)
+        private async Task CacheResultsAsync()
+        {
+            _isQueuing = true;
+            var pageCount = 0;
+            while (await _enumerator.MoveNextAsync())
+            {
+                _queueCache.Enqueue(BuildPagedResult(_enumerator.Current.Items));
+                pageCount++;
+                if (pageCount > Limit) break;
+            }
+            _isQueuing = false;
+        }
+
+        private PagedResult<YouTubeVideoListItem> BuildPagedResult(IReadOnlyList<ISearchResult> results)
         {
             return new PagedResult<YouTubeVideoListItem>
-			{
-				Count = results.Count,
-				Results = results.OfType<VideoSearchResult>().Select(BuildYouTubeListItem),
-			};
-		}
+            {
+                Count = results.Count, Results = results.OfType<VideoSearchResult>().Select(BuildYouTubeListItem),
+            };
+        }
 
         private YouTubeVideoListItem BuildYouTubeListItem(VideoSearchResult videoResult)
-		{
-			return new YouTubeVideoListItem
-			{
-				Author = videoResult.Author.Title,
-				Id = videoResult.Id,
-				ImageUri = videoResult.Thumbnails.First().Url,
-				Title = videoResult.Title,
-				Uri = videoResult.Url,
-				Duration = videoResult.Duration
-			};
-		} 
+        {
+            return new YouTubeVideoListItem
+            {
+                Author = videoResult.Author.Title,
+                Id = videoResult.Id,
+                ImageUri = videoResult.Thumbnails.First().Url,
+                Title = videoResult.Title,
+                Uri = videoResult.Url,
+                Duration = videoResult.Duration
+            };
+        }
     }
 }
