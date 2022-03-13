@@ -15,6 +15,7 @@ namespace MusicRoom.Core.ViewModels.Home
 {
     public class HomeViewModel : ViewModelBase
     {
+        #region Reactive Properties
         [Reactive] public string VideoQuery { get; set; }
 
         [Reactive] private PagedResult<YouTubeVideoListItem> CurrentPage { get; set; }
@@ -24,12 +25,25 @@ namespace MusicRoom.Core.ViewModels.Home
         [Reactive] public ObservableCollection<YouTubeVideoListItem> VideoList { get; private set; }
 
         [Reactive] public int Total { get; private set; }
+        #endregion
 
+        #region Observables as Properties
         [ObservableAsProperty] private bool IsLoadingInit { get; }
 
         [ObservableAsProperty] private bool IsLoadingNext { get; }
 
         [ObservableAsProperty] public bool IsLoading { get; }
+        #endregion
+
+        #region Commands
+        public ReactiveCommand<Unit, PagedResult<YouTubeVideoListItem>> SearchAsyncCommand { get; }
+
+        private ReactiveCommand<YouTubeVideoListItem, YouTubeVideoListItem> PlayVideoCommand { get; }
+
+        public ReactiveCommand<Unit, PagedResult<YouTubeVideoListItem>> GetNextPageAsyncCommand { get; }
+
+        public ReactiveCommand<Unit, Unit> GoToChatAsyncCommand { get; }
+        #endregion
 
         public HomeViewModel(IScreen screen = null, IYoutubeSearchService youtube = null) : base(screen)
         {
@@ -90,13 +104,5 @@ namespace MusicRoom.Core.ViewModels.Home
                 .WhereNotNull()
                 .InvokeCommand(PlayVideoCommand);
         }
-
-        public ReactiveCommand<Unit, PagedResult<YouTubeVideoListItem>> SearchAsyncCommand { get; }
-
-        private ReactiveCommand<YouTubeVideoListItem, YouTubeVideoListItem> PlayVideoCommand { get; }
-
-        public ReactiveCommand<Unit, PagedResult<YouTubeVideoListItem>> GetNextPageAsyncCommand { get; }
-
-        public ReactiveCommand<Unit, Unit> GoToChatAsyncCommand { get; }
     }
 }
