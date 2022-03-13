@@ -29,7 +29,7 @@ namespace MusicRoom.iOS
             _userController = config.UserContentController;
             var script = new WKUserScript(new NSString(JavaScriptFunction), WKUserScriptInjectionTime.AtDocumentEnd, false);
             _userController.AddUserScript(script);
-            _userController.AddScriptMessageHandler(this, "invokeAction");
+            _userController.AddScriptMessageHandler(this, "invokeActionAsync");
         }
 
         protected override void OnElementChanged(VisualElementChangedEventArgs e)
@@ -39,20 +39,19 @@ namespace MusicRoom.iOS
             if (e.OldElement != null)
             {
                 _userController.RemoveAllUserScripts();
-                _userController.RemoveScriptMessageHandler("invokeAction");
+                _userController.RemoveScriptMessageHandler("invokeActionAsync");
                 var hybridWebView = e.OldElement as HybridWebView;
                 hybridWebView?.Cleanup();
             }
 
             if (e.NewElement == null) return;
-            var filename = Path.Combine(NSBundle.MainBundle.BundlePath, "YouTubePlayer.html");
-            //var filename = Path.Combine(NSBundle.MainBundle.BundlePath, ((HybridWebView)Element).Uri);
+            var filename = Path.Combine(NSBundle.MainBundle.BundlePath, ((HybridWebView)Element).Uri);
             LoadRequest(new NSUrlRequest(new NSUrl(filename, false)));
         }
 
         public void DidReceiveScriptMessage(WKUserContentController userContentController, WKScriptMessage message)
         {
-            ((HybridWebView)Element).InvokeAction(message.Body.ToString());
+            ((HybridWebView)Element).InvokeActionAsync(message.Body.ToString());
         }
 
         protected override void Dispose(bool disposing)

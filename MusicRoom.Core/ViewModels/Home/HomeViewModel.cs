@@ -1,14 +1,15 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Reactive;
-using System.Reactive.Linq;
-using System.Runtime.Serialization;
-using System.Threading.Tasks;
 using DynamicData;
 using MusicRoom.Core.Models;
 using MusicRoom.Core.Services.Interfaces;
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 using Splat;
+
+// ReSharper disable UnassignedGetOnlyAutoProperty
+// ReSharper disable UnusedAutoPropertyAccessor.Global
 
 namespace MusicRoom.Core.ViewModels.Home
 {
@@ -16,128 +17,88 @@ namespace MusicRoom.Core.ViewModels.Home
     {
         public string Uri => "YouTubePlayer.html";
 
-        private string _videoQuery;
-        [DataMember] public string VideoQuery
-        {
-            get => _videoQuery;
-            set => this.RaiseAndSetIfChanged(ref _videoQuery, value);
-        }
+        [Reactive] public string VideoQuery { get; set; }
 
-        private ObservableCollection<YouTubeVideoListItem> _videoList;
-        [DataMember] public ObservableCollection<YouTubeVideoListItem> VideoList
-        {
-            get => _videoList;
-            set => this.RaiseAndSetIfChanged(ref _videoList, value);
-        }
+        [Reactive] private PagedResult<YouTubeVideoListItem> CurrentPage { get; set; }
 
-        private PagedResult<YouTubeVideoListItem> _videoPage;
-        [DataMember] public PagedResult<YouTubeVideoListItem> VideoPage
-        {
-            get => _videoPage;
-            set => this.RaiseAndSetIfChanged(ref _videoPage, value);
-        }
+        [Reactive] public YouTubeVideoListItem Video { get; set; }
 
-        private readonly ObservableAsPropertyHelper<int> _count;
-        [DataMember] public int Total => _count?.Value ?? 0;
-        [DataMember] public string VideoCount => (_count?.Value ?? 0) > 0
-            ? $"Displaying {_count?.Value} Videos"
-            : "Search Videos";
+        [Reactive] public ObservableCollection<YouTubeVideoListItem> VideoList { get; private set; }
 
-        private bool _isLoading;
-        [DataMember] public bool IsLoading
-        {
-            get => _isLoading;
-            set => this.RaiseAndSetIfChanged(ref _isLoading, value);
-        }
+        [Reactive] public int Total { get; private set; }
 
-        private YouTubeVideoListItem _video;
-        [DataMember] public YouTubeVideoListItem Video
-        {
-            get => _video;
-            set => this.RaiseAndSetIfChanged(ref _video, value);
-        }
+        [ObservableAsProperty] private bool IsLoadingInit { get; }
 
-        private readonly IYoutubeSearchService _youtube;
+        [ObservableAsProperty] private bool IsLoadingNext { get; }
+
+        [ObservableAsProperty] public bool IsLoading { get; }
 
         public HomeViewModel(IScreen screen = null, IYoutubeSearchService youtube = null) : base(screen)
         {
             UrlPathSegment = "Home";
 
-            _youtube = youtube ?? Locator.Current.GetService<IYoutubeSearchService>();
+            youtube ??= Locator.Current.GetService<IYoutubeSearchService>();
 
-            SearchAsyncCommand = ReactiveCommand.CreateFromTask( SearchAsync, this.WhenAnyValue(
-                    vm => vm.VideoQuery,
-                        q => !string.IsNullOrEmpty(q)));
+            SearchAsyncCommand = ReactiveCommand
+                .CreateFromTask(async () => await youtube!.SearchVideosAsync(VideoQuery),
+                    this.WhenAnyValue(
+                        vm => vm.IsLoading,
+                        vm => vm.VideoQuery,
+                        (b, q) => !b && !string.IsNullOrEmpty(q)));
 
-            GetNextPageAsyncCommand = ReactiveCommand.CreateFromTask(GetNextPageAsync);
+            // impossible to have null value for CurrentPage
+            GetNextPageAsyncCommand = ReactiveCommand
+                .CreateFromTask(async () => await youtube!.GetNextPageAsync(CurrentPage!.Next),
+                    this.WhenAnyValue(
+                        vm => vm.IsLoading,
+                        b => !b));
 
-            PlayVideoCommand = ReactiveCommand.Create<YouTubeVideoListItem>(Play);
+            PlayVideoCommand = ReactiveCommand.Create<YouTubeVideoListItem, YouTubeVideoListItem>( video => video );
+
+            MessageBus.Current.RegisterMessageSource(PlayVideoCommand);
 
             // TODO: Replace mvx navigation with reactive ui
             //GoToChatAsyncCommand = ReactiveCommand.CreateFromTask(async () => await _navMan.Navigate<ChatViewModel>());
 
-            // accumulate total videos
-            _count = this
-                .WhenAnyValue(vm => vm.VideoPage)
-                .Where( vp => vp != null)
-                .Select( vp => vp.Count + Total)
-                .ToProperty(this, nameof(Total), Total, true);
+            SearchAsyncCommand.IsExecuting.ToPropertyEx(this, x => x.IsLoadingInit);
 
-            // notify video count property total changed
-             this
-                 .WhenAnyValue(vm => vm.Total)
-                 .Where(t => t > 0)
-                 .ToProperty(this, nameof(VideoCount));
+            GetNextPageAsyncCommand.IsExecuting.ToPropertyEx(this, x => x.IsLoadingNext);
 
-            // any time a video changes we play the video command
+            // compose both loading events so easier for UI to know
+            this
+                .WhenAnyValue(
+                     vm => vm.IsLoadingInit,
+                     vm => vm.IsLoadingNext,
+                     (init, next) => init || next)
+                .ToPropertyEx(this, x => x.IsLoading);
+
+            // this commands acts as a state initializer in a way
+            SearchAsyncCommand.Subscribe(firstPage =>
+            {
+                CurrentPage = firstPage;
+                Total = CurrentPage.Count;
+                VideoList = new ObservableCollection<YouTubeVideoListItem>(CurrentPage.Results);
+            });
+
+            GetNextPageAsyncCommand.Subscribe(nextPage =>
+            {
+                CurrentPage = nextPage;
+                Total += CurrentPage.Count;
+                VideoList.AddRange(CurrentPage.Results);
+            });
+
             this
                 .WhenAnyValue(v => v.Video)
-                .Where( v => v != null)
+                .WhereNotNull()
                 .InvokeCommand(PlayVideoCommand);
         }
 
-        // TODO: replace mvx interaction with reactive ui
-        // private MvxInteraction<string> _interaction = new MvxInteraction<string>();
-        // public IMvxInteraction<string> Interaction => _interaction;
+        public ReactiveCommand<Unit, PagedResult<YouTubeVideoListItem>> SearchAsyncCommand { get; }
 
-        public ReactiveCommand<Unit, Unit> SearchAsyncCommand { get; }
+        private ReactiveCommand<YouTubeVideoListItem, YouTubeVideoListItem> PlayVideoCommand { get; }
 
-        public ReactiveCommand<YouTubeVideoListItem, Unit> PlayVideoCommand { get; }
-
-        public ReactiveCommand<Unit, Unit> GetNextPageAsyncCommand { get; }
+        public ReactiveCommand<Unit, PagedResult<YouTubeVideoListItem>> GetNextPageAsyncCommand { get; }
 
         public ReactiveCommand<Unit, Unit> GoToChatAsyncCommand { get; }
-
-        private async Task SearchAsync()
-        {
-            IsLoading = true;
-
-            VideoPage = await _youtube.SearchVideosAsync(VideoQuery);
-
-            VideoList = new ObservableCollection<YouTubeVideoListItem>(VideoPage.Results);
-
-            IsLoading = false;
-	    }
-
-        private void Play(YouTubeVideoListItem video)
-        {
-            // TODO: replace mvx interaction
-			// _interaction.Raise(Video.Id);
-            Console.WriteLine($"Invoke Command Works! {video.Title} {video.Author}");
-	    }
-
-        private async Task GetNextPageAsync()
-        {
-            if (!IsLoading)
-            {
-			    IsLoading = true;
-
-			    VideoPage = await _youtube.GetNextPageAsync(VideoPage.Next);
-
-			    VideoList.AddRange(VideoPage.Results);
-
-			    IsLoading = false;
-			}
-	    }
     }
 }

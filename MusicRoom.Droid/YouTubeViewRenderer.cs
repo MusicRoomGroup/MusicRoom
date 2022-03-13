@@ -9,9 +9,9 @@ using Xamarin.Forms.Platform.Android;
 
 [assembly: ExportRenderer(typeof(HybridWebView), typeof(HybridWebViewRenderer))]
 namespace MusicRoom.Droid
-    
+
 {
-    
+
     public class HybridWebViewRenderer : Xamarin.Forms.Platform.Android.WebViewRenderer
     {
         const string JavascriptFunction = "function invokeCSharpAction(data){jsBridge.invokeAction(data);}";
@@ -34,7 +34,7 @@ namespace MusicRoom.Droid
             Control.Settings.MediaPlaybackRequiresUserGesture = false;
             if (e.OldElement != null)
             {
-                
+
                 Control.RemoveJavascriptInterface("jsBridge");
                 ((HybridWebView)Element).Cleanup();
             }
@@ -81,14 +81,14 @@ namespace MusicRoom.Droid
         }
 
         [JavascriptInterface]
-        [Export("invokeAction")]
+        [Export("invokeActionAsync")]
         public void InvokeAction(string data)
         {
             HybridWebViewRenderer hybridRenderer;
 
             if (hybridWebViewRenderer != null && hybridWebViewRenderer.TryGetTarget(out hybridRenderer))
             {
-                ((HybridWebView)hybridRenderer.Element).InvokeAction(data);
+                ((HybridWebView)hybridRenderer.Element).InvokeActionAsync(data);
             }
         }
 

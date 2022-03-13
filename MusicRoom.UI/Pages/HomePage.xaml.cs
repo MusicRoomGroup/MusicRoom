@@ -1,6 +1,5 @@
 using System.Reactive.Disposables;
-using System.Reactive.Linq;
-using MusicRoom.Core.Models;
+using MusicRoom.Core.ViewModels.Home;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using ReactiveUI;
@@ -16,14 +15,10 @@ namespace MusicRoom.UI.Pages
 
             this.WhenActivated(disposable =>
             {
-                this.Bind(ViewModel,
-                        vm => vm.Uri,
-                        v => v.YouTubePlayer.Uri)
-                    .DisposeWith(disposable);
-
-                this.Bind(ViewModel,
-                        vm => vm.VideoCount,
-                        v => v.VideoCount.Text)
+                this.OneWayBind(ViewModel,
+                        vm => vm.Total,
+                        v => v.VideoCount.Text,
+                        count => count > 0 ? $"Displaying {count} videos" : "Search Videos" )
                     .DisposeWith(disposable);
 
                 this.Bind(ViewModel,
