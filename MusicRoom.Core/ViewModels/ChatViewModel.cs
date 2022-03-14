@@ -1,64 +1,43 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Reactive;
-using System.Runtime.Serialization;
-using System.Threading.Tasks;
 using MusicRoom.SignalRClient.Interfaces;
 using MusicRoom.SignalRClient.Models;
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 using Splat;
 
 namespace MusicRoom.Core.ViewModels
 {
     public class ChatViewModel : ViewModelBase
     {
-        private readonly IChatService _chatService;
-
-        public ChatViewModel(IChatService chatService = null)
+        public ChatViewModel(IScreen screen = null, IChatService chatService = null) : base(screen)
         {
-            _chatService = chatService ?? Locator.Current.GetService<IChatService>();
+            ChatMessage = new ChatMessage { Id = Guid.NewGuid(), GroupId = Guid.NewGuid(), User = "Joe" };
 
-            if (_chatService != null) _chatService.OnReceivedMessage += _chatService_OnReceivedMessage;
+            chatService ??= Locator.Current.GetService<IChatService>();
+
+            chatService!.Start(ChatMessage.GroupId);
+
+            chatService.StreamMessages().Subscribe(m => Messages.Add(m));
+
+            SendMessageCommand = ReactiveCommand.CreateFromTask(
+                async () => await chatService.SendMessage(ChatMessage),
+                this.WhenAnyValue(
+                    _ => chatService.IsConnected(),
+                    vm => vm.Message,
+                    (connected, msg) => connected && !string.IsNullOrEmpty(msg)));
 
             this.WhenAnyValue(vm => vm.Message)
                 .ToProperty(this, nameof(ChatMessage.Message));
-
-            SendMessageCommand = ReactiveCommand.CreateFromTask(async () => await SendMessageAsync());
         }
 
-        private ChatMessage ChatMessage { get; set; } = new ChatMessage
-        {
-            GroupId = Guid.NewGuid(),
-            User = "Joe"
-        };
+        [Reactive] private ChatMessage ChatMessage { get; set; }
 
-        [DataMember]
-        private string _message;
-        public string Message
-	    {
-            get => _message;
-            set => this.RaiseAndSetIfChanged(ref _message, value);
-	    }
+        [Reactive] public string Message { get; set; }
 
-        public ObservableCollection<ChatMessage> Messages { get; set; }
-	        = new ObservableCollection<ChatMessage>();
-
-        // TODO: replace mvx interaction
-        //public override async Task Initialize() => await _chatService.StartAsync(ChatMessage.GroupId);
-
-        private void _chatService_OnReceivedMessage(object sender, ChatMessage e)
-            => Messages.Add(e);
-
-        public bool IsConnected => _chatService.IsConnected();
+        public ObservableCollection<ChatMessage> Messages { get; } = new ObservableCollection<ChatMessage>();
 
         public ReactiveCommand<Unit, Unit> SendMessageCommand { get; }
-
-        private async Task SendMessageAsync()
-        {
-            if (IsConnected)
-            {
-                await _chatService.SendMessage(ChatMessage);
-            }
-        }
     }
 }
