@@ -83,18 +83,6 @@
     <AndroidResource Include="Resources\layout\Toolbar.axml" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="MvvmCross.DroidX.Material">
-      <Version>8.0.2</Version>
-    </PackageReference>
-    <PackageReference Include="ReactiveUI">
-      <Version>17.1.50</Version>
-    </PackageReference>
-    <PackageReference Include="ReactiveUI.Events.XamForms">
-      <Version>15.1.1</Version>
-    </PackageReference>
-    <PackageReference Include="ReactiveUI.XamForms">
-      <Version>17.1.50</Version>
-    </PackageReference>
     <PackageReference Include="Serilog.Extensions.Logging">
       <Version>3.1.0</Version>
     </PackageReference>

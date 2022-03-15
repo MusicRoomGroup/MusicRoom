@@ -6,13 +6,6 @@ using Android.App;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
-using MvvmCross.Binding.BindingContext;
-using MvvmCross.Commands;
-using MvvmCross.Core;
-using MvvmCross.IoC;
-using MvvmCross.Navigation;
-using MvvmCross.ViewModels;
-using MvvmCross.Views;
 
 namespace MusicRoom.Droid.Linker
 {
@@ -77,75 +70,6 @@ namespace MusicRoom.Droid.Linker
             changed.PropertyChanged += (sender, e) => { _ = e.PropertyName; };
         }
 
-        public void Include(MvxPropertyInjector injector)
-        {
-            _ = new MvxPropertyInjector();
-        }
 
-        public void Include(MvxTaskBasedBindingContext context)
-        {
-            context.Dispose();
-            var context2 = new MvxTaskBasedBindingContext();
-            context2.Dispose();
-        }
-
-        public void Include(MvxViewModelViewTypeFinder viewModelViewTypeFinder)
-        {
-            _ = new MvxViewModelViewTypeFinder(null, null);
-        }
-
-        public void Include(MvxNavigationService service, IMvxViewModelLoader loader, IMvxViewDispatcher viewDispatcher)
-        {
-            _ = new MvxNavigationService(null, viewDispatcher, MvvmCross.Mvx.IoCProvider);
-            _ = new MvxAppStart<MvxNullViewModel>(null, null);
-        }
-
-        public void Include(ConsoleColor color)
-        {
-            Console.Write("");
-            Console.WriteLine("");
-            _ = Console.ForegroundColor;
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.ForegroundColor = ConsoleColor.Magenta;
-            Console.ForegroundColor = ConsoleColor.White;
-            Console.ForegroundColor = ConsoleColor.Gray;
-            Console.ForegroundColor = ConsoleColor.DarkGray;
-        }
-
-        public void Include(MvxSettings settings)
-        {
-            _ = new MvxSettings();
-        }
-
-        public void Include(MvxStringToTypeParser parser)
-        {
-            _ = new MvxStringToTypeParser();
-        }
-
-        public void Include(MvxViewModelLoader loader)
-        {
-            _ = new MvxViewModelLoader(null);
-        }
-
-        public void Include(MvxViewModelViewLookupBuilder builder)
-        {
-            _ = new MvxViewModelViewLookupBuilder();
-        }
-
-        public void Include(MvxCommandCollectionBuilder builder)
-        {
-            _ = new MvxCommandCollectionBuilder();
-        }
-
-        public void Include(MvxStringDictionaryNavigationSerializer serializer)
-        {
-            _ = new MvxStringDictionaryNavigationSerializer();
-        }
-
-        public void Include(MvxChildViewModelCache cache)
-        {
-            _ = new MvxChildViewModelCache();
-        }
     }
 }
